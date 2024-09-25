@@ -1,12 +1,29 @@
-package com.crunchiest;
+package com.crunchiest.listener;
 
+import com.crunchiest.data.FishingData;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
-
 import java.util.UUID;
+
+/*
+* CRUNCHIEST FISHING
+*   ____ ____  _   _ _   _  ____ _   _ ___ _____ ____ _____   _____ ___ ____  _   _ ___ _   _  ____ 
+*  / ___|  _ \| | | | \ | |/ ___| | | |_ _| ____/ ___|_   _| |  ___|_ _/ ___|| | | |_ _| \ | |/ ___|
+* | |   | |_) | | | |  \| | |   | |_| || ||  _| \___ \ | |   | |_   | |\___ \| |_| || ||  \| | |  _ 
+* | |___|  _ <| |_| | |\  | |___|  _  || || |___ ___) || |   |  _|  | | ___) |  _  || || |\  | |_| |
+*  \____|_| \_\\___/|_| \_|\____|_| |_|___|_____|____/ |_|   |_|   |___|____/|_| |_|___|_| \_|\____|
+*
+* Author: Crunchiest_Leaf
+*
+* desc: For Fun Fishing overhaul Plugin!
+*       work in progress!
+* 
+* link: https://github.com/Crunchiest-Leaf/crunchiest_fish
+* 
+*/
 
 /**
  * Listens for player interactions and handles fishing-related actions.

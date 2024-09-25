@@ -1,4 +1,21 @@
-package com.crunchiest;
+package com.crunchiest.util;
+
+/*
+* CRUNCHIEST FISHING
+*   ____ ____  _   _ _   _  ____ _   _ ___ _____ ____ _____   _____ ___ ____  _   _ ___ _   _  ____ 
+*  / ___|  _ \| | | | \ | |/ ___| | | |_ _| ____/ ___|_   _| |  ___|_ _/ ___|| | | |_ _| \ | |/ ___|
+* | |   | |_) | | | |  \| | |   | |_| || ||  _| \___ \ | |   | |_   | |\___ \| |_| || ||  \| | |  _ 
+* | |___|  _ <| |_| | |\  | |___|  _  || || |___ ___) || |   |  _|  | | ___) |  _  || || |\  | |_| |
+*  \____|_| \_\\___/|_| \_|\____|_| |_|___|_____|____/ |_|   |_|   |___|____/|_| |_|___|_| \_|\____|
+*
+* Author: Crunchiest_Leaf
+*
+* desc: For Fun Fishing overhaul Plugin!
+*       work in progress!
+* 
+* link: https://github.com/Crunchiest-Leaf/crunchiest_fish
+* 
+*/
 
 /**
  * A utility class that holds constants related to fishing mechanics.

@@ -1,13 +1,34 @@
-package com.crunchiest;
+package com.crunchiest.session;
 
+import com.crunchiest.CrunchiestFishingPlugin;
+import com.crunchiest.data.FishingData;
+import com.crunchiest.data.Fish;
+import com.crunchiest.util.SoundUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.Sound;
-import org.bukkit.boss.BossBar; // Add missing import for BossBar
+import org.bukkit.boss.BossBar; 
 import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarStyle;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import net.md_5.bungee.api.ChatColor;
+
+/*
+* CRUNCHIEST FISHING
+*   ____ ____  _   _ _   _  ____ _   _ ___ _____ ____ _____   _____ ___ ____  _   _ ___ _   _  ____ 
+*  / ___|  _ \| | | | \ | |/ ___| | | |_ _| ____/ ___|_   _| |  ___|_ _/ ___|| | | |_ _| \ | |/ ___|
+* | |   | |_) | | | |  \| | |   | |_| || ||  _| \___ \ | |   | |_   | |\___ \| |_| || ||  \| | |  _ 
+* | |___|  _ <| |_| | |\  | |___|  _  || || |___ ___) || |   |  _|  | | ___) |  _  || || |\  | |_| |
+*  \____|_| \_\\___/|_| \_|\____|_| |_|___|_____|____/ |_|   |_|   |___|____/|_| |_|___|_| \_|\____|
+*
+* Author: Crunchiest_Leaf
+*
+* desc: For Fun Fishing overhaul Plugin!
+*       work in progress!
+* 
+* link: https://github.com/Crunchiest-Leaf/crunchiest_fish
+* 
+*/
 
 /**
  * Represents a fishing session for a player, managing the reeling process,
