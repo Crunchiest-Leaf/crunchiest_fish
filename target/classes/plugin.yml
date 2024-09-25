@@ -1,0 +1,4 @@
+name: crunchiest_fish
+main: com.crunchiest.CrunchiestFishingPlugin
+version: 0.0.5
+api-version: 1.21.1
