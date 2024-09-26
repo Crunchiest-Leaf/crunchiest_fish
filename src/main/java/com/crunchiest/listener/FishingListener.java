@@ -2,6 +2,7 @@ package com.crunchiest.listener;
 
 import com.crunchiest.CrunchiestFishingPlugin;
 import com.crunchiest.data.Fish;
+import com.crunchiest.data.FishManager;
 import com.crunchiest.data.FishingData;
 import com.crunchiest.session.FishingSession;
 import com.crunchiest.util.FishingConstants;
@@ -42,6 +43,7 @@ public class FishingListener implements Listener {
 
     // Plugin instance for handling events and scheduling tasks
     private final CrunchiestFishingPlugin plugin;
+    private FishManager fishManager;
 
     // ConcurrentHashMap to store FishingData for each player by their UUID
     private final ConcurrentHashMap<UUID, FishingData> fishingDataMap = new ConcurrentHashMap<>();
@@ -51,8 +53,9 @@ public class FishingListener implements Listener {
      *
      * @param plugin the plugin instance for handling events and scheduling
      */
-    public FishingListener(CrunchiestFishingPlugin plugin) {
+    public FishingListener(FishManager fishManager, CrunchiestFishingPlugin plugin) {
         this.plugin = plugin;
+        this.fishManager = fishManager;
     }
 
     // ------------------------------------------------------------------------
@@ -76,7 +79,7 @@ public class FishingListener implements Listener {
                 break;
 
             case BITE:
-                Fish caughtFish = Fish.createRandomFish(); // Generate random fish
+                Fish caughtFish = fishManager.createRandomFish(); // Generate random fish
                 long reelTime = ThreadLocalRandom.current()
                     .nextLong(FishingConstants.MIN_REEL_TIME_MS, FishingConstants.MAX_REEL_TIME_MS);
                 data.startFishing(caughtFish, reelTime, event.getHook());

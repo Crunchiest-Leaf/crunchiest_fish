@@ -1,7 +1,11 @@
 package com.crunchiest;
 
+import java.io.File;
+
 import org.bukkit.plugin.java.JavaPlugin;
 import com.crunchiest.listener.InteractionListener;
+import com.crunchiest.config.FishConfig;
+import com.crunchiest.data.FishManager;
 import com.crunchiest.listener.FishingListener;
 
 /*
@@ -29,19 +33,24 @@ public class CrunchiestFishingPlugin extends JavaPlugin {
 
     private FishingListener fishingListener;
     private InteractionListener interactionListener; // Declare the InteractionListener
+    private FishConfig fishConfig;
+    private FishManager fishManager;
 
     /**
      * Called when the plugin is enabled. Initializes listeners and registers them.
      */
     @Override
     public void onEnable() {
-        // Initialize the FishingListener and register it
-        fishingListener = new FishingListener(this);
-        getServer().getPluginManager().registerEvents(fishingListener, this);
+        this.fishConfig = new FishConfig(this);
+        this.fishManager = new FishManager();
+        fishConfig.reloadConfig(fishManager);
 
+        fishingListener = new FishingListener(fishManager, this);
         // Initialize the InteractionListener and register it
         interactionListener = new InteractionListener(fishingListener);
+        getServer().getPluginManager().registerEvents(fishingListener, this);
         getServer().getPluginManager().registerEvents(interactionListener, this);
+        getLogger().info("Crunchiest Fishing enabled!");
     }
 
     /**
@@ -53,5 +62,20 @@ public class CrunchiestFishingPlugin extends JavaPlugin {
         if (fishingListener != null) {
             fishingListener.clearData(); // Clear any cached data
         }
+        getLogger().info("Crunchiest Fishing Disabled!");
     }
+
+  /**
+   * Get the FishConfig instance for accessing custom fish data.
+   * 
+   * @return the FishConfig instance.
+   */
+  public FishConfig getFishConfig() {
+      return fishConfig;
+  }
+
+      // Method to reload the fish configuration and update the fish manager
+      public void reloadFishConfig() {
+        fishConfig.reloadConfig(fishManager);
+      }
 }

@@ -1,0 +1,189 @@
+fish:
+  Goldfish:
+    minLength: 5.0
+    maxLength: 15.0
+    minWeight: 0.01
+    maxWeight: 0.1
+    rarity: 70
+    description:
+      - "A small, shiny goldfish."
+      - "Common in ponds and small lakes."
+  
+  Trout:
+    minLength: 20.0
+    maxLength: 30.0
+    minWeight: 0.2
+    maxWeight: 1.0
+    rarity: 20
+    description:
+      - "A common trout found in rivers."
+  
+  Salmon:
+    minLength: 30.0
+    maxLength: 50.0
+    minWeight: 1.0
+    maxWeight: 3.0
+    rarity: 15
+    description:
+      - "A popular fish among anglers."
+      - "Known for its pink flesh."
+
+  Bass:
+    minLength: 40.0
+    maxLength: 70.0
+    minWeight: 3.0
+    maxWeight: 6.0
+    rarity: 10
+    description:
+      - "A robust fish often found in freshwater."
+      - "Great for fishing tournaments."
+
+  Tuna:
+    minLength: 80.0
+    maxLength: 150.0
+    minWeight: 5.0
+    maxWeight: 30.0
+    rarity: 5
+    description:
+      - "A large fish that roams the oceans."
+      - "Highly prized in the fishing industry."
+
+  Catfish:
+    minLength: 60.0
+    maxLength: 120.0
+    minWeight: 4.0
+    maxWeight: 15.0
+    rarity: 30
+    description:
+      - "Known for its whiskers."
+      - "Often found in muddy waters."
+
+  Pike:
+    minLength: 70.0
+    maxLength: 130.0
+    minWeight: 6.0
+    maxWeight: 20.0
+    rarity: 25
+    description:
+      - "A predator fish known for its sharp teeth."
+      - "Often found in lakes and rivers."
+
+  Mackerel:
+    minLength: 30.0
+    maxLength: 60.0
+    minWeight: 1.5
+    maxWeight: 4.0
+    rarity: 35
+    description:
+      - "A fast fish found in oceans."
+      - "Great for sport fishing."
+
+  Snapper:
+    minLength: 50.0
+    maxLength: 90.0
+    minWeight: 2.0
+    maxWeight: 8.0
+    rarity: 20
+    description:
+      - "A colorful fish found in coral reefs."
+      - "Popular in many cuisines."
+
+  Perch:
+    minLength: 15.0
+    maxLength: 35.0
+    minWeight: 0.2
+    maxWeight: 1.0
+    rarity: 40
+    description:
+      - "A small, striped fish."
+      - "Common in freshwater lakes."
+
+  Swordfish:
+    minLength: 100.0
+    maxLength: 200.0
+    minWeight: 10.0
+    maxWeight: 200.0
+    rarity: 2
+    description:
+      - "Known for its long, pointed bill."
+      - "A formidable predator in the sea."
+
+  Flounder:
+    minLength: 25.0
+    maxLength: 50.0
+    minWeight: 0.5
+    maxWeight: 3.0
+    rarity: 30
+    description:
+      - "A flat fish found on the ocean floor."
+      - "Has both eyes on one side."
+
+  Angelfish:
+    minLength: 10.0
+    maxLength: 20.0
+    minWeight: 0.1
+    maxWeight: 0.5
+    rarity: 50
+    description:
+      - "A small and colorful fish."
+      - "Often kept in aquariums."
+
+  Grouper:
+    minLength: 60.0
+    maxLength: 120.0
+    minWeight: 5.0
+    maxWeight: 30.0
+    rarity: 15
+    description:
+      - "A large fish that hides in reefs."
+      - "Popular for deep-sea fishing."
+
+  Haddock:
+    minLength: 40.0
+    maxLength: 80.0
+    minWeight: 1.0
+    maxWeight: 5.0
+    rarity: 20
+    description:
+      - "A fish commonly found in the North Atlantic."
+      - "Often used in fish and chips."
+
+  Bream:
+    minLength: 25.0
+    maxLength: 50.0
+    minWeight: 0.5
+    maxWeight: 2.0
+    rarity: 30
+    description:
+      - "A fish found in freshwater and brackish waters."
+      - "Known for its distinctive shape."
+
+  Cod:
+    minLength: 50.0
+    maxLength: 100.0
+    minWeight: 2.0
+    maxWeight: 10.0
+    rarity: 10
+    description:
+      - "A staple fish in the fishing industry."
+      - "Famous for its flaky white flesh."
+
+  Tilapia:
+    minLength: 20.0
+    maxLength: 40.0
+    minWeight: 0.5
+    maxWeight: 2.0
+    rarity: 30
+    description:
+      - "A popular fish for aquaculture."
+      - "Commonly found in freshwater."
+
+  Koi:
+    minLength: 10.0
+    maxLength: 50.0
+    minWeight: 1.0
+    maxWeight: 3.0
+    rarity: 40
+    description:
+      - "Colorful fish often kept in garden ponds."
+      - "Symbolizes luck and prosperity."

@@ -1,47 +1,19 @@
 package com.crunchiest.data;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-/*
-* CRUNCHIEST FISHING
-*   ____ ____  _   _ _   _  ____ _   _ ___ _____ ____ _____   _____ ___ ____  _   _ ___ _   _  ____ 
-*  / ___|  _ \| | | | \ | |/ ___| | | |_ _| ____/ ___|_   _| |  ___|_ _/ ___|| | | |_ _| \ | |/ ___|
-* | |   | |_) | | | |  \| | |   | |_| || ||  _| \___ \ | |   | |_   | |\___ \| |_| || ||  \| | |  _ 
-* | |___|  _ <| |_| | |\  | |___|  _  || || |___ ___) || |   |  _|  | | ___) |  _  || || |\  | |_| |
-*  \____|_| \_\\___/|_| \_|\____|_| |_|___|_____|____/ |_|   |_|   |___|____/|_| |_|___|_| \_|\____|
-*
-* Author: Crunchiest_Leaf
-*
-* desc: For Fun Fishing overhaul Plugin!
-*       work in progress!
-* 
-* link: https://github.com/Crunchiest-Leaf/crunchiest_fish
-* 
-*/
-
 /**
- * Represents a fish with attributes such as type, size, weight, and rarity.
+ * Represents a fish with attributes such as type, size, weight, rarity, and description.
  */
 public class Fish {
     private String type;
-    private double minLength; // Minimum length in cm
-    private double maxLength; // Maximum length in cm
-    private double minWeight; // Minimum weight in kg
-    private double maxWeight; // Maximum weight in kg
+    private double length; // Fixed length in cm
+    private double weight; // Fixed weight in kg
     private int rarity; // Rarity weight (higher number means less rare)
+    private List<String> description; // Description of the fish
 
     private static final Random RANDOM = new Random();
-    private static final List<Fish> FISH_TYPES = new ArrayList<>();
-
-    static {
-        FISH_TYPES.add(new Fish("Goldfish", 5.0, 15.0, 0.01, 0.1, 70)); // Common
-        FISH_TYPES.add(new Fish("Trout", 20.0, 30.0, 0.2, 1.0, 20)); // Common
-        FISH_TYPES.add(new Fish("Salmon", 30.0, 40.0, 0.5, 1.5, 10)); // Moderate
-        FISH_TYPES.add(new Fish("Bass", 40.0, 60.0, 1.0, 3.0, 5)); // Rare
-        FISH_TYPES.add(new Fish("Tuna", 80.0, 120.0, 5.0, 30.0, 1)); // Very Rare
-    }
 
     /**
      * Constructs a Fish object with specified attributes.
@@ -52,15 +24,15 @@ public class Fish {
      * @param minWeight   the minimum weight in kg
      * @param maxWeight   the maximum weight in kg
      * @param rarity      the rarity weight (higher number means less rare)
+     * @param description the description of the fish
      */
     public Fish(String type, double minLength, double maxLength,
-                double minWeight, double maxWeight, int rarity) {
+                double minWeight, double maxWeight, int rarity, List<String> description) {
         this.type = type;
-        this.minLength = minLength;
-        this.maxLength = maxLength;
-        this.minWeight = minWeight;
-        this.maxWeight = maxWeight;
+        this.length = getRandomLength(minLength, maxLength); // Store a fixed length
+        this.weight = getRandomWeight(minWeight, maxWeight); // Store a fixed weight
         this.rarity = rarity;
+        this.description = description;
     }
 
     /**
@@ -73,21 +45,21 @@ public class Fish {
     }
 
     /**
-     * Returns a random length of the fish within its specified range.
+     * Returns the length of the fish.
      *
-     * @return the random length of the fish in cm
+     * @return the fixed length of the fish in cm
      */
     public double getLength() {
-        return getRandomLength(); // Get random length within the range
+        return length; // Return the stored length
     }
 
     /**
-     * Returns a random weight of the fish within its specified range.
+     * Returns the weight of the fish.
      *
-     * @return the random weight of the fish in kg
+     * @return the fixed weight of the fish in kg
      */
     public double getWeight() {
-        return getRandomWeight(); // Get random weight within the range
+        return weight; // Return the stored weight
     }
 
     /**
@@ -105,15 +77,27 @@ public class Fish {
      * @return a string representation of the fish's length and weight
      */
     public String getFormattedInfo() {
-        return String.format("Length: %.2f cm, Weight: %.2f kg", getLength(), getWeight());
+        return String.format("Type: %s, Length: %.2f cm, Weight: %.2f kg", 
+            type, getLength(), getWeight());
+    }
+
+    /**
+     * Returns the description of the fish as a formatted string.
+     *
+     * @return a string representation of the fish's description
+     */
+    public String getDescription() {
+        return String.join("\n", description);
     }
 
     /**
      * Generates a random length for the fish, biased towards smaller lengths.
      *
+     * @param minLength the minimum length in cm
+     * @param maxLength the maximum length in cm
      * @return the random length of the fish in cm
      */
-    private double getRandomLength() {
+    private double getRandomLength(double minLength, double maxLength) {
         double randomValue = Math.pow(RANDOM.nextDouble(), 3); // Cube the random value to bias towards smaller fish
         return Math.round((minLength + (maxLength - minLength) * randomValue) * 100.0) / 100.0; // Round to 2 decimal places
     }
@@ -121,33 +105,12 @@ public class Fish {
     /**
      * Generates a random weight for the fish, biased towards lighter weights.
      *
+     * @param minWeight the minimum weight in kg
+     * @param maxWeight the maximum weight in kg
      * @return the random weight of the fish in kg
      */
-    private double getRandomWeight() {
+    private double getRandomWeight(double minWeight, double maxWeight) {
         double randomValue = Math.pow(RANDOM.nextDouble(), 3); // Cube the random value to bias towards lighter fish
         return Math.round((minWeight + (maxWeight - minWeight) * randomValue) * 100.0) / 100.0; // Round to 2 decimal places
-    }
-
-    /**
-     * Creates and returns a random fish based on predefined rarity.
-     *
-     * @return a randomly selected Fish object
-     */
-    public static Fish createRandomFish() {
-        Random random = new Random();
-
-        // Calculate total rarity
-        int totalRarity = FISH_TYPES.stream().mapToInt(Fish::getRarity).sum();
-        int rarityRoll = random.nextInt(totalRarity);
-
-        int currentRaritySum = 0;
-        for (Fish fish : FISH_TYPES) {
-            currentRaritySum += fish.getRarity();
-            if (rarityRoll < currentRaritySum) {
-                return fish;
-            }
-        }
-        // Fallback in case no fish is found (should not happen)
-        return FISH_TYPES.get(0);
     }
 }
