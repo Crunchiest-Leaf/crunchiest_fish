@@ -6,11 +6,16 @@ import com.crunchiest.data.Fish;
 import com.crunchiest.util.FishingConstants;
 import com.crunchiest.session.FishingSession;
 import com.crunchiest.util.SoundUtil;
-import org.bukkit.Sound;
+
+import org.bukkit.Material;
+import org.bukkit.entity.FishHook;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerFishEvent;
+import org.bukkit.Location;
+import org.bukkit.util.Vector;
+
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ThreadLocalRandom;
@@ -68,7 +73,7 @@ public class FishingListener implements Listener {
             case BITE:
                 Fish caughtFish = Fish.createRandomFish(); // Encapsulated fish creation
                 long reelTime = ThreadLocalRandom.current().nextLong(FishingConstants.MIN_REEL_TIME_MS, FishingConstants.MAX_REEL_TIME_MS);
-                data.startFishing(caughtFish, reelTime);
+                data.startFishing(caughtFish, reelTime, getPlayerHook(player));
                 new FishingSession(player, data, plugin).startReelSession(); // Delegate the reel session
                 break;
 
@@ -98,6 +103,12 @@ public class FishingListener implements Listener {
         if (data != null) {
             data.incrementClickCount();
             SoundUtil.playClickSound(player); // Play click sound
+
+            // Move the hook closer to the player
+            FishHook hook = data.getFishingHook(); // Ensure you're getting the right hook from FishingData
+            if (hook != null) {
+                moveFishingHookCloser(hook, player);
+            }
 
             // If the click count matches the target clicks, update the last click time
             if (data.getClickCount() == data.getTargetClicks()) {
@@ -148,5 +159,44 @@ public class FishingListener implements Listener {
         for (String message : messages) {
             player.sendMessage(message);
         }
+    }
+
+/**
+ * Moves the fishing hook closer to the player using velocity.
+ *
+ * @param hook   The FishingHook entity to move.
+ * @param player The player whose fishing hook is being moved.
+ */
+private void moveFishingHookCloser(FishHook hook, Player player) {
+  // Get the current location of the hook
+  Location hookLocation = hook.getLocation();
+  Location playerLocation = player.getLocation();
+
+  // Calculate the direction from the hook to the player
+  Vector direction = playerLocation.toVector().subtract(hookLocation.toVector()).normalize();
+
+  // Determine the velocity to apply (adjust the multiplier as needed)
+  Vector velocity = direction.multiply(0.2); // Adjust this multiplier to control speed
+
+  // Set the hook's velocity to move it towards the player
+  hook.setVelocity(velocity);
+}
+
+    /**
+     * Checks if the given location is on solid ground (not water).
+     *
+     * @param location The location to check.
+     * @return true if the location is on land, false if it's water or air.
+     */
+    private boolean isLocationOnLand(Location location) {
+        // Check the block at the new location
+        Material blockType = location.getBlock().getType();
+        // Return true if the block is a solid block (not water)
+        return blockType.isSolid() && blockType != Material.WATER;
+    }
+
+    private FishHook getPlayerHook(Player player) {
+        return player.getWorld().getEntitiesByClass(FishHook.class).stream()
+                .filter(hook -> hook.getShooter().equals(player)).findFirst().orElse(null);
     }
 }

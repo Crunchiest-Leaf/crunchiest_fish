@@ -2,6 +2,7 @@ package com.crunchiest.data;
 
 import com.crunchiest.session.FishingSession;
 import java.util.UUID;
+import org.bukkit.entity.FishHook;
 
 /*
 * CRUNCHIEST FISHING
@@ -35,6 +36,7 @@ public class FishingData {
     private boolean canReel; // Flag to track whether the player can reel
     private long lastReelClickTime;
     private FishingSession fishingSession; // Reference to the FishingSession
+    private FishHook hook;
 
     /**
      * Constructs a FishingData object for a player with a given UUID.
@@ -228,14 +230,20 @@ public class FishingData {
      * @param caughtFish the fish that is caught
      * @param reelTime   the time allocated for reeling in the fish
      */
-    public void startFishing(Fish caughtFish, long reelTime) {
+    public void startFishing(Fish caughtFish, long reelTime, FishHook hook) {
         this.caughtFish = caughtFish;
         this.reelTime = reelTime;
         this.resetClickCount();
         this.fishEscaped = false;
         this.canReel = true;
         this.reelStartTime = System.currentTimeMillis();
+        this.hook = hook;
     }
+
+    public FishHook getFishingHook(){
+      return this.hook;
+    }
+
 
     /**
      * Stops the fishing session, resetting relevant attributes.
@@ -247,5 +255,6 @@ public class FishingData {
         this.resetClickCount();
         this.canReel = false;
         this.lastReelClickTime = 0;
+        this.hook = null;
     }
 }

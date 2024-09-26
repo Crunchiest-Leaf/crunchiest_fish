@@ -167,7 +167,7 @@ public class FishingSession {
                     stopFishing();
                 }
             }
-        }.runTaskLater(plugin, TIRED_FISH_TIME_LIMIT);
+        }.runTaskLater(plugin, TIRED_FISH_TIME_LIMIT); // time for landing time, fish gets off if too slow.
     }
 
     /**
