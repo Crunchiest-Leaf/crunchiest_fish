@@ -6,8 +6,6 @@ import com.crunchiest.data.Fish;
 import com.crunchiest.util.FishingConstants;
 import com.crunchiest.session.FishingSession;
 import com.crunchiest.util.SoundUtil;
-
-import org.bukkit.Material;
 import org.bukkit.entity.FishHook;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -15,7 +13,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerFishEvent;
 import org.bukkit.Location;
 import org.bukkit.util.Vector;
-
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ThreadLocalRandom;
@@ -181,19 +178,6 @@ private void moveFishingHookCloser(FishHook hook, Player player) {
   // Set the hook's velocity to move it towards the player
   hook.setVelocity(velocity);
 }
-
-    /**
-     * Checks if the given location is on solid ground (not water).
-     *
-     * @param location The location to check.
-     * @return true if the location is on land, false if it's water or air.
-     */
-    private boolean isLocationOnLand(Location location) {
-        // Check the block at the new location
-        Material blockType = location.getBlock().getType();
-        // Return true if the block is a solid block (not water)
-        return blockType.isSolid() && blockType != Material.WATER;
-    }
 
     private FishHook getPlayerHook(Player player) {
         return player.getWorld().getEntitiesByClass(FishHook.class).stream()

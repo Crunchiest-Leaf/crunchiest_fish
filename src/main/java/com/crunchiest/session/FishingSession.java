@@ -5,7 +5,6 @@ import com.crunchiest.data.FishingData;
 import com.crunchiest.data.Fish;
 import com.crunchiest.util.SoundUtil;
 import org.bukkit.Bukkit;
-import org.bukkit.Sound;
 import org.bukkit.boss.BossBar; 
 import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarStyle;
