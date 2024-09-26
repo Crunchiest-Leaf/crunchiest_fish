@@ -144,14 +144,6 @@ public class FishingListener implements Listener {
     public void handlePlayerClick(UUID playerUUID, Player player) {
         FishingData data = fishingDataMap.get(playerUUID);
         if (data != null) {
-            data.incrementClickCount(); // Increment click count
-            SoundUtil.playClickSound(player); // Play click sound
-
-            // Move the hook closer to the player
-            FishHook hook = data.getFishingHook();
-            if (hook != null) {
-                moveFishingHookCloser(hook, player);
-            }
 
             // Update data if the click count reaches the target
             if (data.getClickCount() == data.getTargetClicks()) {
@@ -162,6 +154,15 @@ public class FishingListener implements Listener {
             if (data.getClickCount() <= data.getTargetClicks()) {
                 long elapsedTime = System.currentTimeMillis() - data.getReelStartTime();
                 long totalReelTime = data.getReelTime();
+
+                data.incrementClickCount(); // Increment click count
+                SoundUtil.playClickSound(player); // Play click sound
+
+                // Move the hook closer to the player
+                FishHook hook = data.getFishingHook();
+                if (hook != null) {
+                    moveFishingHookCloser(hook, player);
+                }
 
                 FishingSession fishingSession = data.getFishingSession();
                 if (fishingSession != null) {
