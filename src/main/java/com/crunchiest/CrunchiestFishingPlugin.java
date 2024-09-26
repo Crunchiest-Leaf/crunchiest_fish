@@ -1,7 +1,5 @@
 package com.crunchiest;
 
-import java.io.File;
-
 import org.bukkit.plugin.java.JavaPlugin;
 import com.crunchiest.listener.InteractionListener;
 import com.crunchiest.config.FishConfig;
