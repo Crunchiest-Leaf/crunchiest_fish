@@ -1,18 +1,22 @@
 package com.crunchiest.listener;
 
-import com.crunchiest.data.FishingData;
 import com.crunchiest.CrunchiestFishingPlugin;
 import com.crunchiest.data.Fish;
-import com.crunchiest.util.FishingConstants;
+import com.crunchiest.data.FishingData;
 import com.crunchiest.session.FishingSession;
+import com.crunchiest.util.FishingConstants;
 import com.crunchiest.util.SoundUtil;
+
 import org.bukkit.entity.FishHook;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerFishEvent;
+import org.bukkit.event.player.PlayerKickEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.Location;
 import org.bukkit.util.Vector;
+
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ThreadLocalRandom;
@@ -26,12 +30,9 @@ import java.util.concurrent.ThreadLocalRandom;
 *  \____|_| \_\\___/|_| \_|\____|_| |_|___|_____|____/ |_|   |_|   |___|____/|_| |_|___|_| \_|\____|
 *
 * Author: Crunchiest_Leaf
-*
-* desc: For Fun Fishing overhaul Plugin!
-*       work in progress!
 * 
-* link: https://github.com/Crunchiest-Leaf/crunchiest_fish
-* 
+* Description: A fun fishing overhaul plugin. Still a work in progress!
+* GitHub: https://github.com/Crunchiest-Leaf/crunchiest_fish
 */
 
 /**
@@ -39,7 +40,10 @@ import java.util.concurrent.ThreadLocalRandom;
  */
 public class FishingListener implements Listener {
 
+    // Plugin instance for handling events and scheduling tasks
     private final CrunchiestFishingPlugin plugin;
+
+    // ConcurrentHashMap to store FishingData for each player by their UUID
     private final ConcurrentHashMap<UUID, FishingData> fishingDataMap = new ConcurrentHashMap<>();
 
     /**
@@ -50,6 +54,10 @@ public class FishingListener implements Listener {
     public FishingListener(CrunchiestFishingPlugin plugin) {
         this.plugin = plugin;
     }
+
+    // ------------------------------------------------------------------------
+    // EVENT HANDLERS
+    // ------------------------------------------------------------------------
 
     /**
      * Handles the PlayerFishEvent, managing the fishing state for the player.
@@ -68,10 +76,11 @@ public class FishingListener implements Listener {
                 break;
 
             case BITE:
-                Fish caughtFish = Fish.createRandomFish(); // Encapsulated fish creation
-                long reelTime = ThreadLocalRandom.current().nextLong(FishingConstants.MIN_REEL_TIME_MS, FishingConstants.MAX_REEL_TIME_MS);
-                data.startFishing(caughtFish, reelTime, getPlayerHook(player));
-                new FishingSession(player, data, plugin).startReelSession(); // Delegate the reel session
+                Fish caughtFish = Fish.createRandomFish(); // Generate random fish
+                long reelTime = ThreadLocalRandom.current()
+                    .nextLong(FishingConstants.MIN_REEL_TIME_MS, FishingConstants.MAX_REEL_TIME_MS);
+                data.startFishing(caughtFish, reelTime, event.getHook());
+                new FishingSession(player, data, plugin).startReelSession(); // Start reel session
                 break;
 
             case FISHING:
@@ -80,7 +89,7 @@ public class FishingListener implements Listener {
 
             case REEL_IN:
                 if (data.isFishEscaped()) {
-                    data.setFishEscaped(false);
+                    data.setFishEscaped(false); // Reset escape status
                 }
                 break;
 
@@ -88,6 +97,40 @@ public class FishingListener implements Listener {
                 break;
         }
     }
+
+    /**
+     * Handles the PlayerQuitEvent to remove player data from fishingDataMap.
+     *
+     * @param event the PlayerQuitEvent triggered when a player leaves the server
+     */
+    @EventHandler
+    public void onPlayerQuit(PlayerQuitEvent event) {
+        Player player = event.getPlayer();
+        UUID playerUUID = player.getUniqueId();
+
+        // Remove player from the fishingDataMap to conserve memory
+        fishingDataMap.remove(playerUUID);
+        plugin.getLogger().info("Removed fishing data for player: " + player.getName());
+    }
+
+    /**
+     * Handles the PlayerKickEvent to remove player data from fishingDataMap.
+     *
+     * @param event the PlayerKickEvent triggered when a player is kicked from the server
+     */
+    @EventHandler
+    public void onPlayerKick(PlayerKickEvent event) {
+        Player player = event.getPlayer();
+        UUID playerUUID = player.getUniqueId();
+
+        // Remove player from the fishingDataMap to conserve memory
+        fishingDataMap.remove(playerUUID);
+        plugin.getLogger().info("Removed fishing data for player: " + player.getName() + " (kicked)");
+    }
+
+    // ------------------------------------------------------------------------
+    // PLAYER FISHING HANDLING
+    // ------------------------------------------------------------------------
 
     /**
      * Handles the player clicking action during the fishing session.
@@ -98,29 +141,25 @@ public class FishingListener implements Listener {
     public void handlePlayerClick(UUID playerUUID, Player player) {
         FishingData data = fishingDataMap.get(playerUUID);
         if (data != null) {
-            data.incrementClickCount();
+            data.incrementClickCount(); // Increment click count
             SoundUtil.playClickSound(player); // Play click sound
 
             // Move the hook closer to the player
-            FishHook hook = data.getFishingHook(); // Ensure you're getting the right hook from FishingData
+            FishHook hook = data.getFishingHook();
             if (hook != null) {
                 moveFishingHookCloser(hook, player);
             }
 
-            // If the click count matches the target clicks, update the last click time
+            // Update data if the click count reaches the target
             if (data.getClickCount() == data.getTargetClicks()) {
                 data.updateLastReelClickTime();
             }
 
-            // Update the boss bars only if the click count is less than the target clicks
+            // Update boss bars during reeling
             if (data.getClickCount() <= data.getTargetClicks()) {
-                // Calculate elapsed time using the correct reel start time
                 long elapsedTime = System.currentTimeMillis() - data.getReelStartTime();
-
-                // Get the total reel time
                 long totalReelTime = data.getReelTime();
 
-                // Call the updateFishingBars method from the FishingSession
                 FishingSession fishingSession = data.getFishingSession();
                 if (fishingSession != null) {
                     fishingSession.updateFishingBars(elapsedTime, totalReelTime, data.getTargetClicks());
@@ -128,6 +167,48 @@ public class FishingListener implements Listener {
             }
         }
     }
+
+    // ------------------------------------------------------------------------
+    // UTILITIES
+    // ------------------------------------------------------------------------
+
+    /**
+     * Moves the fishing hook closer to the player using velocity.
+     *
+     * @param hook   The FishingHook entity to move.
+     * @param player The player whose fishing hook is being moved.
+     */
+    private void moveFishingHookCloser(FishHook hook, Player player) {
+        // Get the current location of the hook
+        Location hookLocation = hook.getLocation();
+        Location playerLocation = player.getLocation();
+
+        // If hook is already too close, do nothing
+        if (playerLocation.distance(hookLocation) < 0.5) return;
+
+        // Calculate the direction from the hook to the player
+        Vector direction = playerLocation.toVector().subtract(hookLocation.toVector()).normalize();
+
+        // Apply velocity to the hook towards the player
+        Vector velocity = direction.multiply(0.2); // Adjust multiplier to control speed
+        hook.setVelocity(velocity);
+    }
+
+    /**
+     * Sends messages to the specified player.
+     *
+     * @param player the player to send messages to
+     * @param messages the messages to send to the player
+     */
+    private void sendMessage(Player player, String... messages) {
+        for (String message : messages) {
+            player.sendMessage(message);
+        }
+    }
+
+    // ------------------------------------------------------------------------
+    // DATA MANAGEMENT
+    // ------------------------------------------------------------------------
 
     /**
      * Clears all fishing data for players.
@@ -144,43 +225,5 @@ public class FishingListener implements Listener {
      */
     public FishingData getFishingData(UUID playerUUID) {
         return fishingDataMap.get(playerUUID);
-    }
-
-    /**
-     * Sends messages to the specified player.
-     *
-     * @param player the player to send messages to
-     * @param messages the messages to send to the player
-     */
-    private void sendMessage(Player player, String... messages) {
-        for (String message : messages) {
-            player.sendMessage(message);
-        }
-    }
-
-/**
- * Moves the fishing hook closer to the player using velocity.
- *
- * @param hook   The FishingHook entity to move.
- * @param player The player whose fishing hook is being moved.
- */
-private void moveFishingHookCloser(FishHook hook, Player player) {
-  // Get the current location of the hook
-  Location hookLocation = hook.getLocation();
-  Location playerLocation = player.getLocation();
-
-  // Calculate the direction from the hook to the player
-  Vector direction = playerLocation.toVector().subtract(hookLocation.toVector()).normalize();
-
-  // Determine the velocity to apply (adjust the multiplier as needed)
-  Vector velocity = direction.multiply(0.2); // Adjust this multiplier to control speed
-
-  // Set the hook's velocity to move it towards the player
-  hook.setVelocity(velocity);
-}
-
-    private FishHook getPlayerHook(Player player) {
-        return player.getWorld().getEntitiesByClass(FishHook.class).stream()
-                .filter(hook -> hook.getShooter().equals(player)).findFirst().orElse(null);
     }
 }
