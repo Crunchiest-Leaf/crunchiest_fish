@@ -14,6 +14,21 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
+/*
+* CRUNCHIEST FISHING
+*   ____ ____  _   _ _   _  ____ _   _ ___ _____ ____ _____   _____ ___ ____  _   _ ___ _   _  ____ 
+*  / ___|  _ \| | | | \ | |/ ___| | | |_ _| ____/ ___|_   _| |  ___|_ _/ ___|| | | |_ _| \ | |/ ___|
+* | |   | |_) | | | |  \| | |   | |_| || ||  _| \___ \ | |   | |_   | |\___ \| |_| || ||  \| | |  _ 
+* | |___|  _ <| |_| | |\  | |___|  _  || || |___ ___) || |   |  _|  | | ___) |  _  || || |\  | |_| |
+*  \____|_| \_\\___/|_| \_|\____|_| |_|___|_____|____/ |_|   |_|   |___|____/|_| |_|___|_| \_|\____|
+*
+* Author: Crunchiest_Leaf
+* 
+* Description: A fun fishing overhaul plugin. Still a work in progress!
+* GitHub: https://github.com/Crunchiest-Leaf/crunchiest_fish
+*/
+
+
 /**
  * FishConfigManager:
  * Handles loading of fish.yml config data.
