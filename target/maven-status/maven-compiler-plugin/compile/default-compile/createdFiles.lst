@@ -1,10 +1,10 @@
+com\crunchiest\util\FishUtil$2.class
 com\crunchiest\session\FishingSession$1.class
 com\crunchiest\data\CustomFish.class
 com\crunchiest\listener\FishingListener$1.class
 com\crunchiest\session\FishingSession.class
 com\crunchiest\session\FishingSession$2.class
 com\crunchiest\listener\FishingListener.class
-com\crunchiest\session\FishingSession$3.class
 com\crunchiest\util\StringUtil.class
 com\crunchiest\config\TreasureConfig.class
 com\crunchiest\CrunchiestFishingPlugin.class
@@ -13,8 +13,9 @@ com\crunchiest\util\TreasureUtil.class
 com\crunchiest\data\FishingData.class
 com\crunchiest\config\FishConfig.class
 com\crunchiest\data\CustomTreasure.class
-com\crunchiest\session\FishingSession$4.class
+com\crunchiest\util\FishUtil.class
 com\crunchiest\data\FishManager.class
 com\crunchiest\listener\InteractionListener.class
 com\crunchiest\data\TreasureManager.class
 com\crunchiest\util\FishingConstants.class
+com\crunchiest\util\FishUtil$1.class

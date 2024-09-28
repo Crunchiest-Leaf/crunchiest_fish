@@ -2,30 +2,21 @@ package com.crunchiest.session;
 
 import com.crunchiest.CrunchiestFishingPlugin;
 import com.crunchiest.data.CustomFish;
-import com.crunchiest.data.CustomTreasure;
 import com.crunchiest.data.FishingData;
 import com.crunchiest.data.TreasureManager;
 import com.crunchiest.util.SoundUtil;
-import com.crunchiest.util.StringUtil;
 import com.crunchiest.util.TreasureUtil;
+import com.crunchiest.util.FishUtil;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Bukkit;
-import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarStyle;
 import org.bukkit.boss.BossBar;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.joml.Random;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
 
 /*
 * CRUNCHIEST FISHING
@@ -170,9 +161,9 @@ public class FishingSession {
 
                     // Use a ternary operator for the action
                     if (randomValue <= 70) {
-                        displayCaughtFish(); // 70% chance to display fish
+                        FishUtil.displayCaughtFish(player, fishingData, plugin); // 70% chance to display fish
                     } else {
-                        generateTreasure(); // 30% chance to spawn treasure
+                        TreasureUtil.generateTreasure(player, treasureManager); // 30% chance to spawn treasure
                       }
                       this.cancel();
                       return;
@@ -183,136 +174,6 @@ public class FishingSession {
         }.runTaskTimer(plugin, 0L, 1L);
     }
 
-    /**
-     * Displays information about the caught fish to the player and spawns it.
-     */
-    private void displayCaughtFish() {
-        String fishInfo = fishingData.getCaughtFish().getFormattedInfo();
-        player.sendMessage(fishInfo);
-        player.sendTitle(ChatColor.GOLD + fishingData.getCaughtFish().getType(), fishInfo, 5, 60, 10);
-        SoundUtil.playSuccessSounds(player);
-        spawnFishInFrontOfPlayer(fishingData.getCaughtFish());
-        stopFishing();
-    }
-
-    private void generateTreasure() {
-      CustomTreasure treasure = treasureManager.rollForTreasure();
-      String treasureName = StringUtil.removeUnderscores(treasure.getName());
-      player.sendMessage("You fish up some treasure... or trash...");
-      SoundUtil.playTreasureSounds(player);
-      player.sendTitle(ChatColor.GOLD + treasureName, ChatColor.DARK_GREEN + TreasureUtil.generateTreasureQuip(), 5, 60, 10);
-      spawnTreaureItem(treasure);
-    }
-
-    private void spawnTreaureItem(CustomTreasure treasure){
-      ItemStack treasureItem = new ItemStack(treasure.getMaterial());
-      ItemMeta meta = treasureItem.getItemMeta();
-
-      if (meta != null) {
-        meta.setDisplayName(ChatColor.GOLD + StringUtil.removeUnderscores(treasure.getName()));
-          meta.setLore(createTreasureLore(treasure));
-          treasureItem.setItemMeta(meta);
-      }
-
-      player.getWorld().dropItemNaturally(player.getLocation(), treasureItem);
-    }
-
-  
-    /**
-     * Spawns a fish entity in front of the player and then drops it as an item after hovering.
-     *
-     * @param caughtFish the fish that was caught
-     */
-    private void spawnFishInFrontOfPlayer(CustomFish caughtFish) {
-        Location spawnLocation = player.getEyeLocation().add(player.getLocation().getDirection().normalize().multiply(1.5));
-        Entity fishEntity = player.getWorld().spawnEntity(spawnLocation, caughtFish.getEntityType());
-
-        new BukkitRunnable() {
-            int ticks = 0;
-            final int duration = 60; // Hover for 3 seconds
-
-            @Override
-            public void run() {
-                if (ticks < duration) {
-                    Location playerLocation = player.getEyeLocation();
-                    float playerYaw = playerLocation.getYaw();
-
-                    // Specify the distance from the player
-                    double distance = 0.7; // You can change this value to set a different distance
-
-                    // Calculate offsets based on the specified distance
-                    double xOffset = distance * Math.cos(Math.toRadians(playerYaw + 90));
-                    double zOffset = distance * Math.sin(Math.toRadians(playerYaw + 90));
-
-                    // Teleport the fish entity and set its rotation in one go
-                    fishEntity.teleport(playerLocation.clone().add(xOffset, -0.75, zOffset));
-                    fishEntity.setRotation(playerYaw + 90, 0);
-
-                    ticks++;
-                } else {
-                    dropFishItem(caughtFish, fishEntity);
-                    fishEntity.remove();
-                    this.cancel();
-                }
-            }
-        }.runTaskTimer(plugin, 0L, 1L);
-    }
-
-    /**
-     * Drops the caught fish as an item with custom name, length, and weight.
-     *
-     * @param caughtFish  the fish that was caught
-     * @param fishEntity  the fish entity that was spawned
-     */
-    private void dropFishItem(CustomFish caughtFish, Entity fishEntity) {
-        ItemStack fishItem = new ItemStack(getMaterialFromEntityType(caughtFish.getEntityType()));
-        ItemMeta meta = fishItem.getItemMeta();
-
-        if (meta != null) {
-            meta.setDisplayName(ChatColor.GOLD + StringUtil.removeUnderscores(caughtFish.getType()));
-            meta.setLore(createFishLore(caughtFish));
-            fishItem.setItemMeta(meta);
-        }
-
-        player.getWorld().dropItemNaturally(fishEntity.getLocation(), fishItem);
-    }
-
-    /**
-     * Creates a lore list for the fish item.
-     *
-     * @param caughtFish the fish that was caught
-     * @return a list of lore strings
-     */
-    private List<String> createFishLore(CustomFish caughtFish) {
-        List<String> description = new ArrayList<>();
-        description.add("-=- - - - - - - - - - - - - - - - - -=-");
-        description.add(ChatColor.GRAY + "Length: " + caughtFish.getLength() + " cm");
-        description.add(ChatColor.GRAY + "Weight: " + caughtFish.getWeight() + " kg");
-        description.add("-=- - - - - - - - - - - - - - - - - -=-");
-        description.addAll(formatEntityDescriptions(caughtFish.getDescription()));
-        return description;
-    }
-
-    private List<String> createTreasureLore(CustomTreasure treasure) {
-      List<String> description = new ArrayList<>();
-      description.add("-=- - - - - - - - - - - - - - - - - -=-");
-      description.addAll(formatEntityDescriptions(treasure.getDescription()));
-      description.add("-=- - - - - - - - - - - - - - - - - -=-");
-      return description;
-    }
-
-    /**
-     * Formats entity descriptions by adding a ChatColor.
-     *
-     * @param descriptions the original descriptions
-     * @return a list of modified descriptions with ChatColor
-     */
-    private List<String> formatEntityDescriptions(List<String> descriptions) {
-        ChatColor color = ChatColor.GOLD;
-        return descriptions.stream()
-                .map(s -> color + s)
-                .collect(Collectors.toList());
-    }
 
     /**
      * Calculates the target number of clicks needed to reel in a caught fish.
@@ -376,22 +237,4 @@ public class FishingSession {
                (offHand != null && offHand.getType() == Material.FISHING_ROD);
     }
 
-    /**
-     * Retrieves the material type associated with the fish's entity type.
-     *
-     * @param entityType the type of entity representing the fish
-     * @return the corresponding Material for that fish type
-     */
-    private Material getMaterialFromEntityType(EntityType entityType) {
-        switch (entityType) {
-            case SALMON:
-                return Material.SALMON;
-            case TROPICAL_FISH:
-                return Material.TROPICAL_FISH;
-            case PUFFERFISH:
-                return Material.PUFFERFISH;
-            default:
-                return Material.COD;
-        }
-    }
 }
