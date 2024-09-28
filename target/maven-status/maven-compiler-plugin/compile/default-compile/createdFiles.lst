@@ -1,13 +1,15 @@
 com\crunchiest\session\FishingSession$1.class
+com\crunchiest\data\CustomFish.class
 com\crunchiest\listener\FishingListener$1.class
 com\crunchiest\session\FishingSession.class
-com\crunchiest\data\Fish.class
 com\crunchiest\session\FishingSession$2.class
 com\crunchiest\listener\FishingListener.class
+com\crunchiest\session\FishingSession$3.class
 com\crunchiest\CrunchiestFishingPlugin.class
 com\crunchiest\util\SoundUtil.class
 com\crunchiest\data\FishingData.class
 com\crunchiest\config\FishConfig.class
+com\crunchiest\session\FishingSession$4.class
 com\crunchiest\data\FishManager.class
 com\crunchiest\listener\InteractionListener.class
 com\crunchiest\util\FishingConstants.class

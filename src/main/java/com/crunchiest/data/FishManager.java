@@ -24,7 +24,7 @@ import com.crunchiest.config.FishConfig;
  * Manages the collection of fish, allowing dynamic loading and updating of fish data.
  */
 public class FishManager {
-    private final List<Fish> fishList;
+    private final List<CustomFish> fishList;
 
     /**
      * Constructs a FishManager.
@@ -38,7 +38,7 @@ public class FishManager {
      *
      * @param customFish the list of custom Fish to add
      */
-    public void addCustomFish(List<Fish> customFish) {
+    public void addCustomFish(List<CustomFish> customFish) {
         fishList.clear(); // Clear existing fish
         fishList.addAll(customFish); // Add new custom fish
     }
@@ -49,7 +49,7 @@ public class FishManager {
      * @param fishConfig The FishConfig instance to load data from
      */
     public void refreshFishData(FishConfig fishConfig) {
-        List<Fish> updatedFishList = fishConfig.loadFishData();
+        List<CustomFish> updatedFishList = fishConfig.loadFishData();
         addCustomFish(updatedFishList); // Refresh fish data in the manager
     }
 
@@ -58,7 +58,7 @@ public class FishManager {
      *
      * @return List of Fish objects.
      */
-    public List<Fish> getFishList() {
+    public List<CustomFish> getFishList() {
         return fishList;
     }
 
@@ -67,17 +67,17 @@ public class FishManager {
      *
      * @return a randomly selected Fish object or null if no fish available
      */
-    public Fish createRandomFish() {
+    public CustomFish createRandomFish() {
         if (fishList.isEmpty()) {
             return null; // No fish available
         }
 
         // Calculate total rarity
-        int totalRarity = fishList.stream().mapToInt(Fish::getRarity).sum();
+        int totalRarity = fishList.stream().mapToInt(CustomFish::getRarity).sum();
         int rarityRoll = (int) (Math.random() * totalRarity);
 
         int currentRaritySum = 0;
-        for (Fish fish : fishList) {
+        for (CustomFish fish : fishList) {
             currentRaritySum += fish.getRarity();
             if (rarityRoll < currentRaritySum) {
                 return fish;
@@ -86,4 +86,6 @@ public class FishManager {
 
         return null; // Fallback (should not happen)
     }
+
+    
 }

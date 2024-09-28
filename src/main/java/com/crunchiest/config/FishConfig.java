@@ -2,9 +2,10 @@ package com.crunchiest.config;
 
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.EntityType;
 
 import com.crunchiest.CrunchiestFishingPlugin;
-import com.crunchiest.data.Fish;
+import com.crunchiest.data.CustomFish;
 import com.crunchiest.data.FishManager;
 
 import java.io.File;
@@ -133,8 +134,8 @@ public class FishConfig {
      *
      * @return List of Fish objects
      */
-    public List<Fish> loadFishData() {
-        List<Fish> fishList = new ArrayList<>();
+    public List<CustomFish> loadFishData() {
+        List<CustomFish> fishList = new ArrayList<>();
         
         if (fishConfig.isConfigurationSection("fish")) {
             for (String fishName : fishConfig.getConfigurationSection("fish").getKeys(false)) {
@@ -147,9 +148,12 @@ public class FishConfig {
                 double maxWeight = fishConfig.getDouble(path + ".maxWeight");
                 int rarity = fishConfig.getInt(path + ".rarity");
                 List<String> description = fishConfig.getStringList(path + ".description");
+                            // Read the entity type for the fish
+                String entityTypeName = fishConfig.getString(path + ".entityType", "COD"); // Default to COD if not specified
+                EntityType entityType = EntityType.valueOf(entityTypeName.toUpperCase());
 
                 // Create new Fish object and add to the list
-                Fish customFish = new Fish(fishName, minLength, maxLength, minWeight, maxWeight, rarity, description);
+                CustomFish customFish = new CustomFish(fishName, minLength, maxLength, minWeight, maxWeight, rarity, description, entityType);
                 fishList.add(customFish);
             }
             plugin.getLogger().info("Loaded " + fishList.size() + " fish from configuration.");

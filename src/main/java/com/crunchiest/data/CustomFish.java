@@ -3,15 +3,18 @@ package com.crunchiest.data;
 import java.util.List;
 import java.util.Random;
 
+import org.bukkit.entity.EntityType;
+
 /**
  * Represents a fish with attributes such as type, size, weight, rarity, and description.
  */
-public class Fish {
+public class CustomFish {
     private String type;
     private double length; // Fixed length in cm
     private double weight; // Fixed weight in kg
     private int rarity; // Rarity weight (higher number means less rare)
     private List<String> description; // Description of the fish
+    private EntityType entityType; // Add this field
 
     private static final Random RANDOM = new Random();
 
@@ -26,14 +29,21 @@ public class Fish {
      * @param rarity      the rarity weight (higher number means less rare)
      * @param description the description of the fish
      */
-    public Fish(String type, double minLength, double maxLength,
-                double minWeight, double maxWeight, int rarity, List<String> description) {
+    public CustomFish(String type, double minLength, double maxLength,
+                double minWeight, double maxWeight, int rarity, List<String> description, EntityType entityType) {
         this.type = type;
         this.length = getRandomLength(minLength, maxLength); // Store a fixed length
         this.weight = getRandomWeight(minWeight, maxWeight); // Store a fixed weight
         this.rarity = rarity;
         this.description = description;
+        this.entityType = entityType;
     }
+
+        // Getter for entity type
+    public EntityType getEntityType() {
+        return entityType;
+    }
+  
 
     /**
      * Returns the type of the fish.

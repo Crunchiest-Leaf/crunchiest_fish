@@ -1,7 +1,7 @@
 package com.crunchiest.listener;
 
 import com.crunchiest.CrunchiestFishingPlugin;
-import com.crunchiest.data.Fish;
+import com.crunchiest.data.CustomFish;
 import com.crunchiest.data.FishManager;
 import com.crunchiest.data.FishingData;
 import com.crunchiest.session.FishingSession;
@@ -79,7 +79,7 @@ public class FishingListener implements Listener {
                 break;
 
             case BITE:
-                Fish caughtFish = fishManager.createRandomFish(); // Generate random fish
+                CustomFish caughtFish = fishManager.createRandomFish(); // Generate random fish
                 long reelTime = ThreadLocalRandom.current()
                     .nextLong(FishingConstants.MIN_REEL_TIME_MS, FishingConstants.MAX_REEL_TIME_MS);
                 data.startFishing(caughtFish, reelTime, event.getHook());
@@ -94,6 +94,7 @@ public class FishingListener implements Listener {
                 if (data.isFishEscaped()) {
                     data.setFishEscaped(false); // Reset escape status
                 }
+                data.setCanReel(false);
                 break;
 
             default:
@@ -146,15 +147,12 @@ public class FishingListener implements Listener {
         if (data != null) {
 
             // Update data if the click count reaches the target
-            if (data.getClickCount() == data.getTargetClicks()) {
+            if (data.getClickCount() == data.getTargetClicks()-1) {
                 data.updateLastReelClickTime();
             }
 
             // Update boss bars during reeling
             if (data.getClickCount() <= data.getTargetClicks()) {
-                long elapsedTime = System.currentTimeMillis() - data.getReelStartTime();
-                long totalReelTime = data.getReelTime();
-
                 data.incrementClickCount(); // Increment click count
                 SoundUtil.playClickSound(player); // Play click sound
 
@@ -162,11 +160,6 @@ public class FishingListener implements Listener {
                 FishHook hook = data.getFishingHook();
                 if (hook != null) {
                     moveFishingHookCloser(hook, player);
-                }
-
-                FishingSession fishingSession = data.getFishingSession();
-                if (fishingSession != null) {
-                    fishingSession.updateFishingBars(elapsedTime, totalReelTime, data.getTargetClicks());
                 }
             }
         }

@@ -1,5 +1,6 @@
 fish:
   Goldfish:
+    entityType: "TROPICAL_FISH"  # Using TROPICAL_FISH as a representative
     minLength: 5.0
     maxLength: 15.0
     minWeight: 0.01
@@ -8,8 +9,9 @@ fish:
     description:
       - "A small, shiny goldfish."
       - "Common in ponds and small lakes."
-  
+
   Trout:
+    entityType: "COD"  # Using COD as a representative
     minLength: 20.0
     maxLength: 30.0
     minWeight: 0.2
@@ -17,8 +19,9 @@ fish:
     rarity: 20
     description:
       - "A common trout found in rivers."
-  
+
   Salmon:
+    entityType: "SALMON"
     minLength: 30.0
     maxLength: 50.0
     minWeight: 1.0
@@ -29,6 +32,7 @@ fish:
       - "Known for its pink flesh."
 
   Bass:
+    entityType: "COD"  # Using COD as a representative
     minLength: 40.0
     maxLength: 70.0
     minWeight: 3.0
@@ -39,6 +43,7 @@ fish:
       - "Great for fishing tournaments."
 
   Tuna:
+    entityType: "SALMON"  # Using SALMON as a representative
     minLength: 80.0
     maxLength: 150.0
     minWeight: 5.0
@@ -49,6 +54,7 @@ fish:
       - "Highly prized in the fishing industry."
 
   Catfish:
+    entityType: "CAT"  # Using CAT as a representative
     minLength: 60.0
     maxLength: 120.0
     minWeight: 4.0
@@ -59,6 +65,7 @@ fish:
       - "Often found in muddy waters."
 
   Pike:
+    entityType: "COD"  # Using COD as a placeholder
     minLength: 70.0
     maxLength: 130.0
     minWeight: 6.0
@@ -69,6 +76,7 @@ fish:
       - "Often found in lakes and rivers."
 
   Mackerel:
+    entityType: "TROPICAL_FISH"  # Using TROPICAL_FISH as a placeholder
     minLength: 30.0
     maxLength: 60.0
     minWeight: 1.5
@@ -79,6 +87,7 @@ fish:
       - "Great for sport fishing."
 
   Snapper:
+    entityType: "TROPICAL_FISH"  # Using TROPICAL_FISH as a placeholder
     minLength: 50.0
     maxLength: 90.0
     minWeight: 2.0
@@ -89,6 +98,7 @@ fish:
       - "Popular in many cuisines."
 
   Perch:
+    entityType: "TROPICAL_FISH"  # Using TROPICAL_FISH as a placeholder
     minLength: 15.0
     maxLength: 35.0
     minWeight: 0.2
@@ -99,6 +109,7 @@ fish:
       - "Common in freshwater lakes."
 
   Swordfish:
+    entityType: "TROPICAL_FISH"  # Using TROPICAL_FISH as a placeholder
     minLength: 100.0
     maxLength: 200.0
     minWeight: 10.0
@@ -109,6 +120,7 @@ fish:
       - "A formidable predator in the sea."
 
   Flounder:
+    entityType: "TROPICAL_FISH"  # Using TROPICAL_FISH as a placeholder
     minLength: 25.0
     maxLength: 50.0
     minWeight: 0.5
@@ -119,6 +131,7 @@ fish:
       - "Has both eyes on one side."
 
   Angelfish:
+    entityType: "TROPICAL_FISH"  # Using TROPICAL_FISH as a placeholder
     minLength: 10.0
     maxLength: 20.0
     minWeight: 0.1
@@ -129,6 +142,7 @@ fish:
       - "Often kept in aquariums."
 
   Grouper:
+    entityType: "TROPICAL_FISH"  # Using TROPICAL_FISH as a placeholder
     minLength: 60.0
     maxLength: 120.0
     minWeight: 5.0
@@ -139,6 +153,7 @@ fish:
       - "Popular for deep-sea fishing."
 
   Haddock:
+    entityType: "COD"  # Using COD as a placeholder
     minLength: 40.0
     maxLength: 80.0
     minWeight: 1.0
@@ -149,6 +164,7 @@ fish:
       - "Often used in fish and chips."
 
   Bream:
+    entityType: "TROPICAL_FISH"  # Using TROPICAL_FISH as a placeholder
     minLength: 25.0
     maxLength: 50.0
     minWeight: 0.5
@@ -159,6 +175,7 @@ fish:
       - "Known for its distinctive shape."
 
   Cod:
+    entityType: "COD"
     minLength: 50.0
     maxLength: 100.0
     minWeight: 2.0
@@ -169,6 +186,7 @@ fish:
       - "Famous for its flaky white flesh."
 
   Tilapia:
+    entityType: "TROPICAL_FISH"  # Using TROPICAL_FISH as a placeholder
     minLength: 20.0
     maxLength: 40.0
     minWeight: 0.5
@@ -179,6 +197,7 @@ fish:
       - "Commonly found in freshwater."
 
   Koi:
+    entityType: "TROPICAL_FISH"  # Using TROPICAL_FISH as a placeholder
     minLength: 10.0
     maxLength: 50.0
     minWeight: 1.0

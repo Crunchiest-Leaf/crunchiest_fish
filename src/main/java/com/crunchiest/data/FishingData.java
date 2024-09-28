@@ -27,7 +27,7 @@ import org.bukkit.entity.FishHook;
  */
 public class FishingData {
     private final UUID playerUUID;
-    private Fish caughtFish;
+    private CustomFish caughtFish;
     private long reelTime; // Time allocated to reel the fish
     private long reelStartTime;
     private boolean fishEscaped;
@@ -64,7 +64,7 @@ public class FishingData {
      *
      * @return the caught fish
      */
-    public Fish getCaughtFish() {
+    public CustomFish getCaughtFish() {
         return caughtFish;
     }
 
@@ -73,7 +73,7 @@ public class FishingData {
      *
      * @param fish the fish to set as caught
      */
-    public void setCaughtFish(Fish fish) {
+    public void setCaughtFish(CustomFish fish) {
         this.caughtFish = fish;
     }
 
@@ -230,7 +230,7 @@ public class FishingData {
      * @param caughtFish the fish that is caught
      * @param reelTime   the time allocated for reeling in the fish
      */
-    public void startFishing(Fish caughtFish, long reelTime, FishHook hook) {
+    public void startFishing(CustomFish caughtFish, long reelTime, FishHook hook) {
         this.caughtFish = caughtFish;
         this.reelTime = reelTime;
         this.resetClickCount();
