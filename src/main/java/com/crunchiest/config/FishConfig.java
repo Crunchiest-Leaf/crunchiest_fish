@@ -36,131 +36,140 @@ import java.util.List;
  */
 public class FishConfig {
 
-    private final CrunchiestFishingPlugin plugin;
-    private final File fishConfigFile;
-    private FileConfiguration fishConfig;
+  private final CrunchiestFishingPlugin plugin;
+  private final File fishConfigFile;
+  private FileConfiguration fishConfig;
 
-    /**
-     * FishConfigManager:
-     * Handles loading of fish.yml config data.
-     *
-     * @param plugin main plugin instance.
-     */
-    public FishConfig(CrunchiestFishingPlugin plugin) {
-        this.plugin = plugin;
-        this.fishConfigFile = new File(plugin.getDataFolder(), "fish.yml");
-        saveDefaultConfig();
-    }
+  /**
+   * FishConfigManager:
+   * Handles loading of fish.yml config data.
+   *
+   * @param plugin main plugin instance.
+   */
+  public FishConfig(CrunchiestFishingPlugin plugin) {
+      this.plugin = plugin;
+      this.fishConfigFile = new File(plugin.getDataFolder(), "fish.yml");
+      saveDefaultConfig();
+  }
 
-    /**
-     * reloadConfig: 
-     * Reloads the fish configuration file.
-     */
-    public void reloadConfig(FishManager fishManager) {
-        plugin.getLogger().info("Loading fish config...");
-        this.fishConfig = YamlConfiguration.loadConfiguration(fishConfigFile);
-        loadDefaultConfig("fish.yml", fishConfig);
-        plugin.getLogger().info("Fish config loaded.");
-        fishManager.refreshFishData(this);
-    }
+  /**
+   * reloadConfig: 
+   * Reloads the fish configuration file.
+   */
+  public void reloadConfig(FishManager fishManager) {
+      plugin.getLogger().info("Loading fish config...");
+      this.fishConfig = YamlConfiguration.loadConfiguration(fishConfigFile);
+      loadDefaultConfig("fish.yml", fishConfig);
+      plugin.getLogger().info("Fish config loaded.");
+      fishManager.refreshFishData(this);
+  }
 
-    /**
-     * getFishConfig:
-     * Retrieves the fish configuration.
-     *
-     * @return Fish configuration
-     */
-    public FileConfiguration getFishConfig() {
-        return this.fishConfig;
-    }
+  /**
+   * getFishConfig:
+   * Retrieves the fish configuration.
+   *
+   * @return Fish configuration
+   */
+  public FileConfiguration getFishConfig() {
+      return this.fishConfig;
+  }
 
-    /**
-     * saveDefaultConfig: 
-     * Saves the default fish configuration from resources if it doesn't exist.
-     */
-    private void saveDefaultConfig() {
-        saveResource("fish.yml", fishConfigFile);
-    }
+  /**
+   * saveDefaultConfig: 
+   * Saves the default fish configuration from resources if it doesn't exist.
+   */
+  private void saveDefaultConfig() {
+      saveResource("fish.yml", fishConfigFile);
+  }
 
-    /**
-     * saveResource:
-     * Saves a default configuration file from the plugin resources.
-     *
-     * @param resourcePath Path to the resource in the plugin JAR
-     * @param file         File to save the resource to
-     */
-    private void saveResource(String resourcePath, File file) {
-        if (!file.exists()) {
-            plugin.saveResource(resourcePath, false);
-        }
-    }
+  /**
+   * saveResource:
+   * Saves a default configuration file from the plugin resources.
+   *
+   * @param resourcePath Path to the resource in the plugin JAR
+   * @param file         File to save the resource to
+   */
+  private void saveResource(String resourcePath, File file) {
+      if (!file.exists()) {
+          plugin.saveResource(resourcePath, false);
+      }
+  }
 
-    /**
-     * loadDefaultConfig:
-     * Loads default configuration from resources if not already existing.
-     *
-     * @param fileName   Name of the file to load
-     * @param config     Configuration to load into
-     */
-    private void loadDefaultConfig(String fileName, FileConfiguration config) {
-        InputStream inputStream = plugin.getResource(fileName);
-        if (inputStream != null) {
-            YamlConfiguration defaultConfig =
-                YamlConfiguration.loadConfiguration(new InputStreamReader(inputStream));
-            config.setDefaults(defaultConfig);
-        }
-    }
+  /**
+   * loadDefaultConfig:
+   * Loads default configuration from resources if not already existing.
+   *
+   * @param fileName   Name of the file to load
+   * @param config     Configuration to load into
+   */
+  private void loadDefaultConfig(String fileName, FileConfiguration config) {
+      InputStream inputStream = plugin.getResource(fileName);
+      if (inputStream != null) {
+          YamlConfiguration defaultConfig =
+              YamlConfiguration.loadConfiguration(new InputStreamReader(inputStream));
+          config.setDefaults(defaultConfig);
+      }
+  }
 
-    /**
-     * saveFishConfig:
-     * Saves the fish configuration file.
-     *
-     * @param errorMessage Error message to log in case of failure
-     */
-    public void saveFishConfig(String errorMessage) {
-        if (fishConfig != null && fishConfigFile != null) {
-            try {
-                fishConfig.save(fishConfigFile);
-            } catch (IOException e) {
-                plugin.getLogger().severe(errorMessage);
-                e.printStackTrace();
-            }
-        }
-    }
+  /**
+   * saveFishConfig:
+   * Saves the fish configuration file.
+   *
+   * @param errorMessage Error message to log in case of failure
+   */
+  public void saveFishConfig(String errorMessage) {
+      if (fishConfig != null && fishConfigFile != null) {
+          try {
+              fishConfig.save(fishConfigFile);
+          } catch (IOException e) {
+              plugin.getLogger().severe(errorMessage);
+              e.printStackTrace();
+          }
+      }
+  }
 
-    /**
-     * loadFishData:
-     * Loads fish data from the fish.yml configuration file.
-     *
-     * @return List of Fish objects
-     */
-    public List<CustomFish> loadFishData() {
-        List<CustomFish> fishList = new ArrayList<>();
-        
-        if (fishConfig.isConfigurationSection("fish")) {
-            for (String fishName : fishConfig.getConfigurationSection("fish").getKeys(false)) {
-                String path = "fish." + fishName;
+  /**
+   * loadFishData:
+   * Loads fish data from the fish.yml configuration file.
+   *
+   * @return List of Fish objects
+   */
+  public List<CustomFish> loadFishData() {
+      List<CustomFish> fishList = new ArrayList<>();
 
-                // Read fish attributes
-                double minLength = fishConfig.getDouble(path + ".minLength");
-                double maxLength = fishConfig.getDouble(path + ".maxLength");
-                double minWeight = fishConfig.getDouble(path + ".minWeight");
-                double maxWeight = fishConfig.getDouble(path + ".maxWeight");
-                int rarity = fishConfig.getInt(path + ".rarity");
-                List<String> description = fishConfig.getStringList(path + ".description");
-                            // Read the entity type for the fish
-                String entityTypeName = fishConfig.getString(path + ".entityType", "COD"); // Default to COD if not specified
-                EntityType entityType = EntityType.valueOf(entityTypeName.toUpperCase());
+      if (fishConfig.isConfigurationSection("fish")) {
+          for (String fishName : fishConfig.getConfigurationSection("fish").getKeys(false)) {
+              String path = "fish." + fishName;
 
-                // Create new Fish object and add to the list
-                CustomFish customFish = new CustomFish(fishName, minLength, maxLength, minWeight, maxWeight, rarity, description, entityType);
-                fishList.add(customFish);
-            }
-            plugin.getLogger().info("Loaded " + fishList.size() + " fish from configuration.");
-        } else {
-            plugin.getLogger().warning("No fish section found in configuration.");
-        }
+              try {
+                  // Read fish attributes
+                  double minLength = fishConfig.getDouble(path + ".minLength");
+                  double maxLength = fishConfig.getDouble(path + ".maxLength");
+                  double minWeight = fishConfig.getDouble(path + ".minWeight");
+                  double maxWeight = fishConfig.getDouble(path + ".maxWeight");
+                  int rarity = fishConfig.getInt(path + ".rarity");
+                  List<String> description = fishConfig.getStringList(path + ".description");
 
-        return fishList;
-    }
+                  // Read the entity type for the fish
+                  String entityTypeName = fishConfig.getString(path + ".entityType", "COD"); // Default to COD if not specified
+                  EntityType entityType = EntityType.valueOf(entityTypeName.toUpperCase());
+
+                  // Create new Fish object and add to the list
+                  CustomFish customFish = new CustomFish(fishName, minLength, maxLength, minWeight, maxWeight, rarity, description, entityType);
+                  fishList.add(customFish);
+              } catch (IllegalArgumentException e) {
+                  plugin.getLogger().severe("Invalid entity type for fish '" + fishName + "': " + e.getMessage());
+              } catch (ClassCastException e) {
+                  plugin.getLogger().severe("Type mismatch for fish '" + fishName + "': " + e.getMessage());
+              } catch (Exception e) {
+                  plugin.getLogger().severe("Error loading fish '" + fishName + "': " + e.getMessage());
+              }
+          }
+          plugin.getLogger().info("Loaded " + fishList.size() + " fish from configuration.");
+      } else {
+          plugin.getLogger().warning("No fish section found in configuration.");
+      }
+
+      return fishList;
+  }
 }
