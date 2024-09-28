@@ -63,4 +63,11 @@ public class SoundUtil {
         player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1.0f, 1.0f);
         player.playSound(player.getLocation(), Sound.ENTITY_AXOLOTL_SPLASH, 1.0f, 1.0f);
     }
+
+    public static void playTreasureSounds(Player player) {
+      player.playSound(player.getLocation(), Sound.BLOCK_CHEST_OPEN, 1.0f, 1.0f);
+      player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1.0f, 1.0f);
+      player.playSound(player.getLocation(), Sound.ENTITY_AXOLOTL_SPLASH, 1.0f, 1.0f);
+      player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_YES, 1.0f, 1.0f);
+  }
 }

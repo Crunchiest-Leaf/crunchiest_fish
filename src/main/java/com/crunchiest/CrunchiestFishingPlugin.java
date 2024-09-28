@@ -3,7 +3,9 @@ package com.crunchiest;
 import org.bukkit.plugin.java.JavaPlugin;
 import com.crunchiest.listener.InteractionListener;
 import com.crunchiest.config.FishConfig;
+import com.crunchiest.config.TreasureConfig;
 import com.crunchiest.data.FishManager;
+import com.crunchiest.data.TreasureManager;
 import com.crunchiest.listener.FishingListener;
 
 /*
@@ -33,6 +35,8 @@ public class CrunchiestFishingPlugin extends JavaPlugin {
     private InteractionListener interactionListener; // Declare the InteractionListener
     private FishConfig fishConfig;
     private FishManager fishManager;
+    private TreasureManager treasureManager;
+    private TreasureConfig treasureConfig;
 
     /**
      * Called when the plugin is enabled. Initializes listeners and registers them.
@@ -42,6 +46,10 @@ public class CrunchiestFishingPlugin extends JavaPlugin {
         this.fishConfig = new FishConfig(this);
         this.fishManager = new FishManager();
         fishConfig.reloadConfig(fishManager);
+
+        this.treasureConfig = new TreasureConfig(this);
+        this.treasureManager = new TreasureManager();
+        treasureConfig.reloadConfig(treasureManager);
 
         fishingListener = new FishingListener(fishManager, this);
         // Initialize the InteractionListener and register it
@@ -63,17 +71,21 @@ public class CrunchiestFishingPlugin extends JavaPlugin {
         getLogger().info("Crunchiest Fishing Disabled!");
     }
 
-  /**
-   * Get the FishConfig instance for accessing custom fish data.
-   * 
-   * @return the FishConfig instance.
-   */
-  public FishConfig getFishConfig() {
-      return fishConfig;
-  }
+    /**
+     * Get the FishConfig instance for accessing custom fish data.
+     * 
+     * @return the FishConfig instance.
+     */
+    public FishConfig getFishConfig() {
+        return fishConfig;
+    }
 
-      // Method to reload the fish configuration and update the fish manager
-      public void reloadFishConfig() {
-        fishConfig.reloadConfig(fishManager);
-      }
+    // Method to reload the fish configuration and update the fish manager
+    public void reloadFishConfig() {
+      fishConfig.reloadConfig(fishManager);
+    }
+
+    public TreasureManager getTreasureManager(){
+      return this.treasureManager;
+    }
 }

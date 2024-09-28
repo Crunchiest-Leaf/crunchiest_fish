@@ -49,6 +49,7 @@ public class FishingData {
         this.fishEscaped = false;
         this.canReel = false;
     }
+    
 
     /**
      * Returns the UUID of the player.

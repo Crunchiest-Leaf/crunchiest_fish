@@ -1,0 +1,372 @@
+treasures:
+  gold_coin:
+    description:
+      - "A shiny gold coin"
+      - "from a forgotten age."
+    material: GOLD_NUGGET
+    rarity: 15
+
+  ancient_scroll:
+    description:
+      - "An old scroll filled"
+      - "with mysterious runes."
+    material: PAPER
+    rarity: 12
+
+  pirate_booty:
+    description:
+      - "A collection of pirate"
+      - "treasure. Worth a fortune."
+      - "... or maybe nothing..."
+    material: CHEST
+    rarity: 5
+
+  pearl:
+    description:
+      - "A rare and beautiful pearl."
+      - "It's perfectly round and gleaming."
+    material: ENDER_PEARL
+    rarity: 10
+
+  sunken_key:
+    description:
+      - "A key lost to the ocean depths."
+      - "What could it unlock?"
+    material: TRIPWIRE_HOOK
+    rarity: 4
+
+  cursed_ring:
+    description:
+      - "A ring that glows faintly"
+      - "with an eerie, dark aura."
+    material: GOLD_NUGGET
+    rarity: 3
+
+  lost_compass:
+    description:
+      - "A rusty compass that still points"
+      - "in a strange direction."
+    material: COMPASS
+    rarity: 8
+
+  mermaid_scale:
+    description:
+      - "A shimmering scale from a mermaid."
+      - "It reflects light beautifully."
+    material: PRISMARINE_SHARD
+    rarity: 9
+
+  pirate_cutlass:
+    description:
+      - "A worn cutlass once used by"
+      - "a legendary pirate."
+    material: IRON_SWORD
+    rarity: 5
+
+  bottle_of_rum:
+    description:
+      - "A sealed bottle of aged rum."
+      - "It smells faintly of the sea."
+    material: POTION
+    rarity: 7
+
+  sunken_crown:
+    description:
+      - "A crown encrusted with barnacles."
+      - "It was once worn by royalty."
+    material: GOLDEN_HELMET
+    rarity: 2
+
+  glowing_crystal:
+    description:
+      - "A radiant crystal that glows softly."
+      - "Its origin is unknown."
+    material: AMETHYST_SHARD
+    rarity: 6
+
+  ancient_coin_pouch:
+    description:
+      - "An old, tattered pouch filled"
+      - "with ancient coins."
+    material: LEATHER
+    rarity: 10
+
+  fisherman's_hook:
+    description:
+      - "A hook once used by an old fisherman."
+      - "It feels lucky."
+    material: FISHING_ROD
+    rarity: 12
+
+  sapphire_gem:
+    description:
+      - "A deep blue gem that sparkles in"
+      - "the light. A true treasure."
+    material: DIAMOND
+    rarity: 3
+
+  weathered_map:
+    description:
+      - "A faded map leading to"
+      - "an unknown destination."
+    material: MAP
+    rarity: 9
+
+  enchanted_feather:
+    description:
+      - "A soft feather that feels"
+      - "light as air. It seems magical."
+    material: FEATHER
+    rarity: 8
+
+  buried_locket:
+    description:
+      - "A golden locket covered in dirt."
+      - "It holds a mysterious picture inside."
+    material: CLOCK
+    rarity: 6
+
+  pirate_flag:
+    description:
+      - "A tattered flag bearing the mark"
+      - "of an infamous pirate crew."
+    material: BLACK_BANNER
+    rarity: 7
+
+  rusty_sword:
+    description:
+      - "An old sword, covered in rust."
+      - "Its days of glory are long past."
+    material: STONE_SWORD
+    rarity: 14
+
+  glowing_moss:
+    description:
+      - "A rare plant that emits a soft glow."
+      - "It must have magical properties."
+    material: GLOW_LICHEN
+    rarity: 11
+
+  diver_helmet:
+    description:
+      - "A rusty diving helmet from a"
+      - "long-forgotten shipwreck."
+    material: IRON_HELMET
+    rarity: 4
+
+  torn_boot:
+    description:
+      - "A worn-out, torn boot."
+      - "It doesn't smell great."
+    material: LEATHER_BOOTS
+    rarity: 25
+
+  driftwood:
+    description:
+      - "A piece of old driftwood."
+      - "It's soaked and useless."
+    material: OAK_LOG
+    rarity: 30
+
+  broken_fishing_rod:
+    description:
+      - "An old fishing rod snapped"
+      - "in half. Completely useless."
+    material: FISHING_ROD
+    rarity: 28
+
+  empty_bottle:
+    description:
+      - "An empty bottle with some"
+      - "water still inside."
+    material: GLASS_BOTTLE
+    rarity: 22
+
+  soggy_leather:
+    description:
+      - "A soggy piece of leather."
+      - "It's beyond repair."
+    material: LEATHER
+    rarity: 27
+
+  rusty_nail:
+    description:
+      - "A rusty iron nail."
+      - "Careful not to step on it!"
+    material: IRON_NUGGET
+    rarity: 20
+
+  cracked_pot:
+    description:
+      - "An old clay pot with cracks."
+      - "It's on the verge of breaking."
+    material: FLOWER_POT
+    rarity: 24
+
+  seaweed:
+    description:
+      - "A handful of slimy seaweed."
+      - "Might be useful for compost."
+    material: KELP
+    rarity: 35
+
+  broken_arrow:
+    description:
+      - "A snapped arrow."
+      - "It can't fly straight anymore."
+    material: ARROW
+    rarity: 18
+
+  mud_clump:
+    description:
+      - "A squishy clump of mud."
+      - "It falls apart in your hand."
+    material: DIRT
+    rarity: 32
+
+  chipped_bone:
+    description:
+      - "A brittle bone fragment."
+      - "Too small to be of use."
+    material: BONE
+    rarity: 29
+
+  bottle_cap:
+    description:
+      - "A rusty old bottle cap."
+      - "Someone didn't care to recycle."
+    material: IRON_NUGGET
+    rarity: 31
+
+  mossy_stone:
+    description:
+      - "A stone covered in moss."
+      - "It has no other purpose."
+    material: COBBLESTONE
+    rarity: 33
+
+  tattered_cloth:
+    description:
+      - "A piece of tattered cloth."
+      - "It's soaked and falling apart."
+    material: WHITE_WOOL
+    rarity: 26
+
+  dead_fish:
+    description:
+      - "A small, lifeless fish."
+      - "It smells awful."
+    material: COD
+    rarity: 30
+
+  broken_glass_shard:
+    description:
+      - "A jagged shard of broken glass."
+      - "Careful! It's sharp."
+    material: GLASS
+    rarity: 21
+
+  old_button:
+    description:
+      - "A loose button from some forgotten"
+      - "article of clothing."
+    material: STONE_BUTTON
+    rarity: 19
+
+  soggy_paper:
+    description:
+      - "A crumpled piece of paper."
+      - "Completely unreadable."
+    material: PAPER
+    rarity: 27
+
+  rotten_apple_core:
+    description:
+      - "A decayed apple core."
+      - "Definitely not edible."
+    material: APPLE
+    rarity: 28
+
+  snapped_chain:
+    description:
+      - "A rusty chain link snapped"
+      - "in two."
+    material: CHAIN
+    rarity: 22
+
+  empty_can:
+    description:
+      - "An empty tin can."
+      - "It's all rusted out."
+    material: IRON_BLOCK
+    rarity: 24
+
+  spoiled_meat:
+    description:
+      - "A piece of rancid meat."
+      - "The stench is unbearable."
+    material: ROTTEN_FLESH
+    rarity: 25
+
+  bent_spoon:
+    description:
+      - "An old spoon, bent and twisted."
+      - "It's not useful anymore."
+    material: STICK
+    rarity: 23
+
+  plastic_waste:
+    description:
+      - "A piece of plastic trash."
+      - "A sad sign of pollution."
+    material: WHITE_DYE
+    rarity: 35
+
+  moldy_bread:
+    description:
+      - "A slice of bread covered"
+      - "in green mold."
+    material: BREAD
+    rarity: 29
+
+  slimy_fish_scales:
+    description:
+      - "Some discarded fish scales."
+      - "They're sticky and gross."
+    material: PRISMARINE_SHARD
+    rarity: 31
+
+  withered_flower:
+    description:
+      - "A once-beautiful flower, now wilted."
+      - "It’s seen better days."
+    material: POPPY
+    rarity: 32
+
+  rusty_screw:
+    description:
+      - "An old screw with rust."
+      - "Completely useless."
+    material: IRON_NUGGET
+    rarity: 19
+
+  decayed_leaf:
+    description:
+      - "A dead leaf that's falling"
+      - "apart in your hand."
+    material: OAK_LEAVES
+    rarity: 34
+
+  discarded_hook:
+    description:
+      - "An old fishing hook, bent"
+      - "and rusty."
+    material: TRIPWIRE_HOOK
+    rarity: 20
+
+  busted_wheel:
+    description:
+      - "An old wheel, cracked and"
+      - "completely broken."
+    material: STONE_BUTTON
+    rarity: 26
