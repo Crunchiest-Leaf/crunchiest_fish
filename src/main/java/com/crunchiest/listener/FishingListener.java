@@ -7,6 +7,7 @@ import com.crunchiest.data.FishingData;
 import com.crunchiest.session.FishingSession;
 import com.crunchiest.util.FishingConstants;
 import com.crunchiest.util.SoundUtil;
+
 import org.bukkit.entity.FishHook;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -16,6 +17,7 @@ import org.bukkit.event.player.PlayerKickEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.Location;
 import org.bukkit.util.Vector;
+
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ThreadLocalRandom;

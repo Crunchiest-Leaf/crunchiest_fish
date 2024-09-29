@@ -1,12 +1,13 @@
 package com.crunchiest;
 
-import org.bukkit.plugin.java.JavaPlugin;
 import com.crunchiest.listener.InteractionListener;
 import com.crunchiest.config.FishConfig;
 import com.crunchiest.config.TreasureConfig;
 import com.crunchiest.data.FishManager;
 import com.crunchiest.data.TreasureManager;
 import com.crunchiest.listener.FishingListener;
+
+import org.bukkit.plugin.java.JavaPlugin;
 
 /*
 * CRUNCHIEST FISHING

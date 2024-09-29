@@ -40,12 +40,25 @@ public class TreasureUtil {
   }
 
   private static List<String> createTreasureLore(CustomTreasure treasure) {
-      List<String> description = new ArrayList<>();
-      description.add("-=- - - - - - - - - - - - - - - - - -=-");
-      description.addAll(StringUtil.formatEntityDescriptions(treasure.getDescription()));
-      description.add("-=- - - - - - - - - - - - - - - - - -=-");
-      return description;
-  }
+    List<String> description = new ArrayList<>();
+
+    // Add a decorative header
+    description.add("§7-=-=-=- Treasure Found -=-=-=-"); // Assuming treasure has a name for emphasis
+    description.add("§f" + "A unique and mysterious item...");
+    description.add("");
+
+    // Add formatted descriptions with additional spacing
+    description.addAll(StringUtil.formatEntityDescriptions(treasure.getDescription())
+        .stream()
+        .map(line -> "§f- " + line) // Prefix each line with a bullet point
+        .toList());
+
+    // Add a decorative footer
+    description.add("");
+    description.add("§7-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-");
+
+    return description;
+}
 
     private static final List<String> TREASURE_QUIPS = Collections.unmodifiableList(
         Arrays.asList(
