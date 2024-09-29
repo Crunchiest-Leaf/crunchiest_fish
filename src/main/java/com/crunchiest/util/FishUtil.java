@@ -1,5 +1,4 @@
 package com.crunchiest.util;
-
 // Bukkit API and Minecraft classes
 import org.bukkit.entity.Player;
 import org.bukkit.Location;
@@ -10,12 +9,10 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.ChatColor;
 import org.bukkit.scheduler.BukkitRunnable;
-
 // Custom project-specific classes
 import com.crunchiest.data.CustomFish;
 import com.crunchiest.data.FishingData;
 import com.crunchiest.CrunchiestFishingPlugin;
-
 // Java utility classes
 import java.util.ArrayList;
 import java.util.List;
