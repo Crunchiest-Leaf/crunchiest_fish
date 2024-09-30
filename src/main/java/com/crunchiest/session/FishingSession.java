@@ -265,5 +265,5 @@ public class FishingSession {
     */
     private boolean isItemStackEmpty(ItemStack itemStack) {
       return itemStack == null || itemStack.getType() == Material.AIR || itemStack.getAmount() <= 0;
-}
+    }
 }

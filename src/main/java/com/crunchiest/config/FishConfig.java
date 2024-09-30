@@ -24,6 +24,7 @@ import java.util.List;
 *  \____|_| \_\\___/|_| \_|\____|_| |_|___|_____|____/ |_|   |_|   |___|____/|_| |_|___|_| \_|\____|
 *
 * Author: Crunchiest_Leaf
+
 * 
 * Description: A fun fishing overhaul plugin. Still a work in progress!
 * GitHub: https://github.com/Crunchiest-Leaf/crunchiest_fish
