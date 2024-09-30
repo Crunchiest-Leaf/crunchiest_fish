@@ -1,9 +1,10 @@
 package com.crunchiest.data;
-//
+
 import com.crunchiest.config.TreasureConfig;
-//
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+import java.util.concurrent.ThreadLocalRandom;
 
 /*
 * CRUNCHIEST FISHING
@@ -33,7 +34,7 @@ public class TreasureManager {
     }
 
     /**
-     * Adds a list of custom treasures to the manager.
+     * Adds a list of custom treasures to the manager, replacing existing treasures.
      *
      * @param customTreasures the list of custom treasures to add
      */
@@ -58,31 +59,31 @@ public class TreasureManager {
      * @return List of CustomTreasure objects.
      */
     public List<CustomTreasure> getTreasureList() {
-        return treasureList;
+        return new ArrayList<>(treasureList); // Return a copy to protect internal state
     }
 
     /**
      * Creates a random treasure based on rarity from the treasure list.
      *
-     * @return a randomly selected CustomTreasure object or null if no treasure available
+     * @return an Optional containing a randomly selected CustomTreasure object or an empty Optional if no treasure available
      */
-    public CustomTreasure rollForTreasure() {
+    public Optional<CustomTreasure> rollForTreasure() {
         if (treasureList.isEmpty()) {
-            return null; // No treasures available
+            return Optional.empty(); // No treasures available
         }
 
         // Calculate total rarity
         int totalRarity = treasureList.stream().mapToInt(CustomTreasure::getRarity).sum();
-        int rarityRoll = (int) (Math.random() * totalRarity);
+        int rarityRoll = ThreadLocalRandom.current().nextInt(totalRarity); // Use ThreadLocalRandom for better performance
 
         int currentRaritySum = 0;
         for (CustomTreasure treasure : treasureList) {
             currentRaritySum += treasure.getRarity();
             if (rarityRoll < currentRaritySum) {
-                return treasure;
+                return Optional.of(treasure);
             }
         }
 
-        return null; // Fallback (should not happen)
+        return Optional.empty(); // Fallback (should not happen)
     }
 }

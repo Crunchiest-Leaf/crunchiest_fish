@@ -1,8 +1,10 @@
 package com.crunchiest.data;
-//
+
 import java.util.ArrayList;
 import java.util.List;
-// 
+import java.util.Optional;
+import java.util.concurrent.ThreadLocalRandom;
+
 import com.crunchiest.config.FishConfig;
 
 /*
@@ -19,7 +21,6 @@ import com.crunchiest.config.FishConfig;
 * GitHub: https://github.com/Crunchiest-Leaf/crunchiest_fish
 */
 
-
 /**
  * Manages the collection of fish, allowing dynamic loading and updating of fish data.
  */
@@ -34,7 +35,7 @@ public class FishManager {
     }
 
     /**
-     * Adds a list of custom fish to the manager.
+     * Adds a list of custom fish to the manager, replacing existing fish.
      *
      * @param customFish the list of custom Fish to add
      */
@@ -59,42 +60,41 @@ public class FishManager {
      * @return List of Fish objects.
      */
     public List<CustomFish> getFishList() {
-        return fishList;
+        return new ArrayList<>(fishList); // Return a copy to protect internal state
     }
 
     /**
      * Creates a random fish based on rarity from the fish list.
      *
-     * @return a randomly selected Fish object or null if no fish available
+     * @return an Optional containing a randomly selected Fish object or an empty Optional if no fish available
      */
-    public CustomFish createRandomFish() {
-      if (fishList.isEmpty()) {
-          return null; // No fish available
-      }
-  
-      // Calculate total rarity
-      int totalRarity = fishList.stream().mapToInt(CustomFish::getRarity).sum();
-      int rarityRoll = (int) (Math.random() * totalRarity);
-  
-      int currentRaritySum = 0;
-      for (CustomFish templateFish : fishList) {
-          currentRaritySum += templateFish.getRarity();
-          if (rarityRoll < currentRaritySum) {
-              // Create a new CustomFish based on the templateFish's properties
-              return new CustomFish(
-                  templateFish.getType(),
-                  templateFish.getMinLength(),
-                  templateFish.getMaxLength(),
-                  templateFish.getMinWeight(),
-                  templateFish.getMaxWeight(),
-                  templateFish.getRarity(),
-                  templateFish.getDescription(),
-                  templateFish.getEntityType()
-              );
-          }
-      }
-  
-      return null; // Fallback (should not happen)
-  }
-  
+    public Optional<CustomFish> createRandomFish() {
+        if (fishList.isEmpty()) {
+            return Optional.empty(); // No fish available
+        }
+
+        // Calculate total rarity
+        int totalRarity = fishList.stream().mapToInt(CustomFish::getRarity).sum();
+        int rarityRoll = ThreadLocalRandom.current().nextInt(totalRarity); // Use ThreadLocalRandom for better performance
+
+        int currentRaritySum = 0;
+        for (CustomFish templateFish : fishList) {
+            currentRaritySum += templateFish.getRarity();
+            if (rarityRoll < currentRaritySum) {
+                // Create a new CustomFish based on the templateFish's properties
+                return Optional.of(new CustomFish(
+                    templateFish.getType(),
+                    templateFish.getMinLength(),
+                    templateFish.getMaxLength(),
+                    templateFish.getMinWeight(),
+                    templateFish.getMaxWeight(),
+                    templateFish.getRarity(),
+                    templateFish.getDescription(),
+                    templateFish.getEntityType()
+                ));
+            }
+        }
+
+        return Optional.empty(); // Fallback (should not happen)
+    }
 }

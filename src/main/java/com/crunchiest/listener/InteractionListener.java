@@ -60,7 +60,19 @@ public class InteractionListener implements Listener {
                 (event.getAction() == Action.LEFT_CLICK_AIR || event.getAction() == Action.LEFT_CLICK_BLOCK)) {
             // Handle the player's clicking when reeling in.
             fishingListener.handlePlayerClick(playerUUID, player);
+        } else {
+            // Optional feedback for players who attempt to click when not able to reel
+            //sendMessage(player, "You can't reel in right now!"); // Consider defining sendMessage
         }
     }
 
-  }
+    /**
+     * Sends a message to the specified player.
+     *
+     * @param player the player to send the message to
+     * @param message the message to send
+     */
+    private void sendMessage(Player player, String message) {
+        player.sendMessage(message); // Sends the message directly to the player
+    }
+}

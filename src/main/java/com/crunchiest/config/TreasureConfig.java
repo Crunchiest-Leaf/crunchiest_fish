@@ -15,9 +15,23 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
+/*
+* CRUNCHIEST FISHING
+*   ____ ____  _   _ _   _  ____ _   _ ___ _____ ____ _____   _____ ___ ____  _   _ ___ _   _  ____ 
+*  / ___|  _ \| | | | \ | |/ ___| | | |_ _| ____/ ___|_   _| |  ___|_ _/ ___|| | | |_ _| \ | |/ ___|
+* | |   | |_) | | | |  \| | |   | |_| || ||  _| \___ \ | |   | |_   | |\___ \| |_| || ||  \| | |  _ 
+* | |___|  _ <| |_| | |\  | |___|  _  || || |___ ___) || |   |  _|  | | ___) |  _  || || |\  | |_| |
+*  \____|_| \_\\___/|_| \_|\____|_| |_|___|_____|____/ |_|   |_|   |___|____/|_| |_|___|_| \_|\____|
+*
+* Author: Crunchiest_Leaf
+* 
+* Description: A fun fishing overhaul plugin. Still a work in progress!
+* GitHub: https://github.com/Crunchiest-Leaf/crunchiest_fish
+*/
+
 /**
- * TreasureConfig:
- * Handles loading of treasures.yml config data.
+ * Manages the treasure configuration file (treasures.yml) for the plugin.
+ * Responsible for loading, saving, and updating treasure data from the configuration.
  */
 public class TreasureConfig {
 
@@ -26,10 +40,9 @@ public class TreasureConfig {
     private FileConfiguration treasureConfig;
 
     /**
-     * TreasureConfig:
-     * Handles loading of treasures.yml config data.
+     * Constructs a TreasureConfig object responsible for handling the treasure configuration.
      *
-     * @param plugin main plugin instance.
+     * @param plugin The main plugin instance
      */
     public TreasureConfig(CrunchiestFishingPlugin plugin) {
         this.plugin = plugin;
@@ -38,8 +51,9 @@ public class TreasureConfig {
     }
 
     /**
-     * reloadConfig:
-     * Reloads the treasure configuration file.
+     * Reloads the treasure configuration file and refreshes the TreasureManager's treasure data.
+     *
+     * @param treasureManager The TreasureManager instance to refresh after loading the config
      */
     public void reloadConfig(TreasureManager treasureManager) {
         plugin.getLogger().info("Loading treasure config...");
@@ -50,29 +64,26 @@ public class TreasureConfig {
     }
 
     /**
-     * getTreasureConfig:
-     * Retrieves the treasure configuration.
+     * Retrieves the current treasure configuration.
      *
-     * @return Treasure configuration
+     * @return The FileConfiguration representing the treasure config
      */
     public FileConfiguration getTreasureConfig() {
         return this.treasureConfig;
     }
 
     /**
-     * saveDefaultConfig:
-     * Saves the default treasure configuration from resources if it doesn't exist.
+     * Saves the default treasure configuration from the resources folder if it doesn't already exist.
      */
     private void saveDefaultConfig() {
         saveResource("treasures.yml", treasureConfigFile);
     }
 
     /**
-     * saveResource:
-     * Saves a default configuration file from the plugin resources.
+     * Saves a configuration file from the plugin's resources folder to the specified file.
      *
-     * @param resourcePath Path to the resource in the plugin JAR
-     * @param file         File to save the resource to
+     * @param resourcePath The path to the resource file in the plugin's JAR
+     * @param file The file to save the resource to
      */
     private void saveResource(String resourcePath, File file) {
         if (!file.exists()) {
@@ -81,11 +92,10 @@ public class TreasureConfig {
     }
 
     /**
-     * loadDefaultConfig:
-     * Loads default configuration from resources if not already existing.
+     * Loads the default configuration from the plugin's resources into the specified configuration.
      *
-     * @param fileName   Name of the file to load
-     * @param config     Configuration to load into
+     * @param fileName The name of the resource file to load
+     * @param config The configuration object to load defaults into
      */
     private void loadDefaultConfig(String fileName, FileConfiguration config) {
         InputStream inputStream = plugin.getResource(fileName);
@@ -97,10 +107,9 @@ public class TreasureConfig {
     }
 
     /**
-     * saveTreasureConfig:
-     * Saves the treasure configuration file.
+     * Saves the treasure configuration to the treasures.yml file, logging an error message if it fails.
      *
-     * @param errorMessage Error message to log in case of failure
+     * @param errorMessage The error message to log if saving fails
      */
     public void saveTreasureConfig(String errorMessage) {
         if (treasureConfig != null && treasureConfigFile != null) {
@@ -114,10 +123,9 @@ public class TreasureConfig {
     }
 
     /**
-     * loadTreasureData:
-     * Loads treasure data from the treasures.yml configuration file.
+     * Loads treasure data from the treasures.yml configuration file and returns a list of CustomTreasure objects.
      *
-     * @return List of CustomTreasure objects
+     * @return A list of CustomTreasure objects representing the treasure data in the config
      */
     public List<CustomTreasure> loadTreasureData() {
         List<CustomTreasure> treasureList = new ArrayList<>();
@@ -133,7 +141,7 @@ public class TreasureConfig {
                     Material material = Material.valueOf(materialName.toUpperCase());
                     int rarity = treasureConfig.getInt(path + ".rarity");
 
-                    // Create new Treasure object and add to the list
+                    // Create new CustomTreasure object and add it to the list
                     CustomTreasure customTreasure = new CustomTreasure(treasureName, description, material, rarity);
                     treasureList.add(customTreasure);
                 } catch (IllegalArgumentException e) {

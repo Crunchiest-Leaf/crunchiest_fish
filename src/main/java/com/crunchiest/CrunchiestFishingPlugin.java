@@ -1,30 +1,28 @@
 package com.crunchiest;
 
-import com.crunchiest.listener.InteractionListener;
 import com.crunchiest.config.FishConfig;
 import com.crunchiest.config.TreasureConfig;
 import com.crunchiest.data.FishManager;
 import com.crunchiest.data.TreasureManager;
+import com.crunchiest.listener.InteractionListener;
 import com.crunchiest.listener.FishingListener;
-
 import org.bukkit.plugin.java.JavaPlugin;
 
 /*
-* CRUNCHIEST FISHING
-*   ____ ____  _   _ _   _  ____ _   _ ___ _____ ____ _____   _____ ___ ____  _   _ ___ _   _  ____ 
-*  / ___|  _ \| | | | \ | |/ ___| | | |_ _| ____/ ___|_   _| |  ___|_ _/ ___|| | | |_ _| \ | |/ ___|
-* | |   | |_) | | | |  \| | |   | |_| || ||  _| \___ \ | |   | |_   | |\___ \| |_| || ||  \| | |  _ 
-* | |___|  _ <| |_| | |\  | |___|  _  || || |___ ___) || |   |  _|  | | ___) |  _  || || |\  | |_| |
-*  \____|_| \_\\___/|_| \_|\____|_| |_|___|_____|____/ |_|   |_|   |___|____/|_| |_|___|_| \_|\____|
-*
-* Author: Crunchiest_Leaf
-*
-* desc: For Fun Fishing overhaul Plugin!
-*       work in progress!
-* 
-* link: https://github.com/Crunchiest-Leaf/crunchiest_fish
-* 
-*/
+ * CRUNCHIEST FISHING
+ *   ____ ____  _   _ _   _  ____ _   _ ___ _____ ____ _____   _____ ___ ____  _   _ ___ _   _  ____ 
+ *  / ___|  _ \| | | | \ | |/ ___| | | |_ _| ____/ ___|_   _| |  ___|_ _/ ___|| | | |_ _| \ | |/ ___|
+ * | |   | |_) | | | |  \| | |   | |_| || ||  _| \___ \ | |   | |_   | |\___ \| |_| || ||  \| | |  _ 
+ * | |___|  _ <| |_| | |\  | |___|  _  || || |___ ___) || |   |  _|  | | ___) |  _  || || |\  | |_| |
+ *  \____|_| \_\\___/|_| \_|\____|_| |_|___|_____|____/ |_|   |_|   |___|____/|_| |_|___|_| \_|\____|
+ *
+ * Author: Crunchiest_Leaf
+ *
+ * desc: For Fun Fishing overhaul Plugin!
+ *       work in progress!
+ *
+ * link: https://github.com/Crunchiest-Leaf/crunchiest_fish
+ */
 
 /**
  * The main class for the Crunchiest Fishing plugin, extending the JavaPlugin.
@@ -33,7 +31,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 public class CrunchiestFishingPlugin extends JavaPlugin {
 
     private FishingListener fishingListener;
-    private InteractionListener interactionListener; // Declare the InteractionListener
+    private InteractionListener interactionListener; // Listener for player interactions
     private FishConfig fishConfig;
     private FishManager fishManager;
     private TreasureManager treasureManager;
@@ -44,6 +42,7 @@ public class CrunchiestFishingPlugin extends JavaPlugin {
      */
     @Override
     public void onEnable() {
+        // Initialize configurations
         this.fishConfig = new FishConfig(this);
         this.fishManager = new FishManager();
         fishConfig.reloadConfig(fishManager);
@@ -52,9 +51,9 @@ public class CrunchiestFishingPlugin extends JavaPlugin {
         this.treasureManager = new TreasureManager();
         treasureConfig.reloadConfig(treasureManager);
 
-        fishingListener = new FishingListener(fishManager, this);
-        // Initialize the InteractionListener and register it
-        interactionListener = new InteractionListener(fishingListener);
+        // Initialize and register listeners
+        this.fishingListener = new FishingListener(fishManager, this);
+        this.interactionListener = new InteractionListener(fishingListener);
         getServer().getPluginManager().registerEvents(fishingListener, this);
         getServer().getPluginManager().registerEvents(interactionListener, this);
         getLogger().info("Crunchiest Fishing enabled!");
@@ -65,28 +64,35 @@ public class CrunchiestFishingPlugin extends JavaPlugin {
      */
     @Override
     public void onDisable() {
-        // Any necessary cleanup can be done here
+        // Clear any cached data
         if (fishingListener != null) {
-            fishingListener.clearData(); // Clear any cached data
+            fishingListener.clearData();
         }
-        getLogger().info("Crunchiest Fishing Disabled!");
+        getLogger().info("Crunchiest Fishing disabled!");
     }
 
     /**
-     * Get the FishConfig instance for accessing custom fish data.
-     * 
+     * Gets the FishConfig instance for accessing custom fish data.
+     *
      * @return the FishConfig instance.
      */
     public FishConfig getFishConfig() {
         return fishConfig;
     }
 
-    // Method to reload the fish configuration and update the fish manager
+    /**
+     * Reloads the fish configuration and updates the fish manager.
+     */
     public void reloadFishConfig() {
-      fishConfig.reloadConfig(fishManager);
+        fishConfig.reloadConfig(fishManager);
     }
 
-    public TreasureManager getTreasureManager(){
-      return this.treasureManager;
+    /**
+     * Gets the TreasureManager instance for managing treasure-related operations.
+     *
+     * @return the TreasureManager instance.
+     */
+    public TreasureManager getTreasureManager() {
+        return treasureManager;
     }
 }

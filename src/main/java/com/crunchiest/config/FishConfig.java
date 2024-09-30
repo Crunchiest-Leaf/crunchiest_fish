@@ -29,10 +29,9 @@ import java.util.List;
 * GitHub: https://github.com/Crunchiest-Leaf/crunchiest_fish
 */
 
-
 /**
- * FishConfigManager:
- * Handles loading of fish.yml config data.
+ * Manages the fish configuration file (fish.yml) for the plugin.
+ * Responsible for loading, saving, and updating fish data from the configuration.
  */
 public class FishConfig {
 
@@ -41,10 +40,9 @@ public class FishConfig {
   private FileConfiguration fishConfig;
 
   /**
-   * FishConfigManager:
-   * Handles loading of fish.yml config data.
+   * Constructs a FishConfig object responsible for handling the fish configuration.
    *
-   * @param plugin main plugin instance.
+   * @param plugin The main plugin instance
    */
   public FishConfig(CrunchiestFishingPlugin plugin) {
       this.plugin = plugin;
@@ -53,8 +51,9 @@ public class FishConfig {
   }
 
   /**
-   * reloadConfig: 
-   * Reloads the fish configuration file.
+   * Reloads the fish configuration file and refreshes the FishManager's fish data.
+   *
+   * @param fishManager The FishManager instance to refresh after loading the config
    */
   public void reloadConfig(FishManager fishManager) {
       plugin.getLogger().info("Loading fish config...");
@@ -65,29 +64,26 @@ public class FishConfig {
   }
 
   /**
-   * getFishConfig:
-   * Retrieves the fish configuration.
+   * Retrieves the current fish configuration.
    *
-   * @return Fish configuration
+   * @return The FileConfiguration representing the fish config
    */
   public FileConfiguration getFishConfig() {
       return this.fishConfig;
   }
 
   /**
-   * saveDefaultConfig: 
-   * Saves the default fish configuration from resources if it doesn't exist.
+   * Saves the default fish configuration from the resources folder if it doesn't already exist.
    */
   private void saveDefaultConfig() {
       saveResource("fish.yml", fishConfigFile);
   }
 
   /**
-   * saveResource:
-   * Saves a default configuration file from the plugin resources.
+   * Saves a configuration file from the plugin's resources folder to the specified file.
    *
-   * @param resourcePath Path to the resource in the plugin JAR
-   * @param file         File to save the resource to
+   * @param resourcePath The path to the resource file in the plugin's JAR
+   * @param file The file to save the resource to
    */
   private void saveResource(String resourcePath, File file) {
       if (!file.exists()) {
@@ -96,11 +92,10 @@ public class FishConfig {
   }
 
   /**
-   * loadDefaultConfig:
-   * Loads default configuration from resources if not already existing.
+   * Loads the default configuration from the plugin's resources into the specified configuration.
    *
-   * @param fileName   Name of the file to load
-   * @param config     Configuration to load into
+   * @param fileName The name of the resource file to load
+   * @param config The configuration object to load defaults into
    */
   private void loadDefaultConfig(String fileName, FileConfiguration config) {
       InputStream inputStream = plugin.getResource(fileName);
@@ -112,10 +107,9 @@ public class FishConfig {
   }
 
   /**
-   * saveFishConfig:
-   * Saves the fish configuration file.
+   * Saves the fish configuration to the fish.yml file, logging an error message if it fails.
    *
-   * @param errorMessage Error message to log in case of failure
+   * @param errorMessage The error message to log if saving fails
    */
   public void saveFishConfig(String errorMessage) {
       if (fishConfig != null && fishConfigFile != null) {
@@ -129,10 +123,9 @@ public class FishConfig {
   }
 
   /**
-   * loadFishData:
-   * Loads fish data from the fish.yml configuration file.
+   * Loads fish data from the fish.yml configuration file and returns a list of CustomFish objects.
    *
-   * @return List of Fish objects
+   * @return A list of CustomFish objects representing the fish data in the config
    */
   public List<CustomFish> loadFishData() {
       List<CustomFish> fishList = new ArrayList<>();
@@ -154,7 +147,7 @@ public class FishConfig {
                   String entityTypeName = fishConfig.getString(path + ".entityType", "COD"); // Default to COD if not specified
                   EntityType entityType = EntityType.valueOf(entityTypeName.toUpperCase());
 
-                  // Create new Fish object and add to the list
+                  // Create new CustomFish object and add it to the list
                   CustomFish customFish = new CustomFish(fishName, minLength, maxLength, minWeight, maxWeight, rarity, description, entityType);
                   fishList.add(customFish);
               } catch (IllegalArgumentException e) {

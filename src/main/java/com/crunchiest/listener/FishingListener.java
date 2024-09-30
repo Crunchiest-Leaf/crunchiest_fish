@@ -7,6 +7,7 @@ import com.crunchiest.data.FishingData;
 import com.crunchiest.session.FishingSession;
 import com.crunchiest.util.FishingConstants;
 import com.crunchiest.util.SoundUtil;
+import java.util.Optional;
 
 import org.bukkit.entity.FishHook;
 import org.bukkit.entity.Player;
@@ -41,9 +42,8 @@ import java.util.concurrent.ThreadLocalRandom;
  */
 public class FishingListener implements Listener {
 
-    // Plugin instance for handling events and scheduling tasks
     private final CrunchiestFishingPlugin plugin;
-    private FishManager fishManager;
+    private final FishManager fishManager;
 
     // ConcurrentHashMap to store FishingData for each player by their UUID
     private final ConcurrentHashMap<UUID, FishingData> fishingDataMap = new ConcurrentHashMap<>();
@@ -51,11 +51,12 @@ public class FishingListener implements Listener {
     /**
      * Constructs a FishingListener for managing fishing events.
      *
-     * @param plugin the plugin instance for handling events and scheduling
+     * @param fishManager the FishManager instance for managing fish data
+     * @param plugin      the plugin instance for handling events and scheduling
      */
     public FishingListener(FishManager fishManager, CrunchiestFishingPlugin plugin) {
-        this.plugin = plugin;
         this.fishManager = fishManager;
+        this.plugin = plugin;
     }
 
     // ------------------------------------------------------------------------
@@ -79,11 +80,7 @@ public class FishingListener implements Listener {
                 break;
 
             case BITE:
-                CustomFish caughtFish = fishManager.createRandomFish(); // Generate random fish
-                long reelTime = ThreadLocalRandom.current()
-                    .nextLong(FishingConstants.MIN_REEL_TIME_MS, FishingConstants.MAX_REEL_TIME_MS);
-                data.startFishing(caughtFish, reelTime, event.getHook());
-                new FishingSession(player, data, plugin).startReelSession(); // Start reel session
+                handleFishBite(event, player, data);
                 break;
 
             case FISHING:
@@ -91,15 +88,36 @@ public class FishingListener implements Listener {
                 break;
 
             case REEL_IN:
-                if (data.isFishEscaped()) {
-                    data.setFishEscaped(false); // Reset escape status
-                }
-                data.setCanReel(false);
+                handleReelIn(data);
                 break;
 
             default:
                 break;
         }
+    }
+private void handleFishBite(PlayerFishEvent event, Player player, FishingData data) {
+    // Handle the Optional<CustomFish> returned by createRandomFish()
+    Optional<CustomFish> optionalCaughtFish = fishManager.createRandomFish();
+    
+    if (optionalCaughtFish.isPresent()) {
+        CustomFish caughtFish = optionalCaughtFish.get(); // Get the fish if present
+        long reelTime = ThreadLocalRandom.current()
+                .nextLong(FishingConstants.MIN_REEL_TIME_MS, FishingConstants.MAX_REEL_TIME_MS);
+        
+        // Start fishing with the caught fish
+        data.startFishing(caughtFish, reelTime, event.getHook());
+        new FishingSession(player, data, plugin).startReelSession(); // Start reel session
+    } else {
+        // Optional feedback if no fish is available
+        sendMessage(player, "No fish available right now!"); // You may need to define sendMessage if not already defined
+    }
+}
+
+    private void handleReelIn(FishingData data) {
+        if (data.isFishEscaped()) {
+            data.setFishEscaped(false); // Reset escape status
+        }
+        data.setCanReel(false);
     }
 
     /**
@@ -109,12 +127,7 @@ public class FishingListener implements Listener {
      */
     @EventHandler
     public void onPlayerQuit(PlayerQuitEvent event) {
-        Player player = event.getPlayer();
-        UUID playerUUID = player.getUniqueId();
-
-        // Remove player from the fishingDataMap to conserve memory
-        fishingDataMap.remove(playerUUID);
-        plugin.getLogger().info("Removed fishing data for player: " + player.getName());
+        removePlayerData(event.getPlayer());
     }
 
     /**
@@ -124,12 +137,13 @@ public class FishingListener implements Listener {
      */
     @EventHandler
     public void onPlayerKick(PlayerKickEvent event) {
-        Player player = event.getPlayer();
-        UUID playerUUID = player.getUniqueId();
+        removePlayerData(event.getPlayer());
+    }
 
-        // Remove player from the fishingDataMap to conserve memory
+    private void removePlayerData(Player player) {
+        UUID playerUUID = player.getUniqueId();
         fishingDataMap.remove(playerUUID);
-        plugin.getLogger().info("Removed fishing data for player: " + player.getName() + " (kicked)");
+        plugin.getLogger().info("Removed fishing data for player: " + player.getName());
     }
 
     // ------------------------------------------------------------------------
@@ -140,14 +154,13 @@ public class FishingListener implements Listener {
      * Handles the player clicking action during the fishing session.
      *
      * @param playerUUID the unique ID of the player
-     * @param player the player object associated with the UUID
+     * @param player     the player object associated with the UUID
      */
     public void handlePlayerClick(UUID playerUUID, Player player) {
         FishingData data = fishingDataMap.get(playerUUID);
         if (data != null) {
-
             // Update data if the click count reaches the target
-            if (data.getClickCount() == data.getTargetClicks()-1) {
+            if (data.getClickCount() == data.getTargetClicks() - 1) {
                 data.updateLastReelClickTime();
             }
 
@@ -161,6 +174,8 @@ public class FishingListener implements Listener {
                 if (hook != null) {
                     moveFishingHookCloser(hook, player);
                 }
+            } else {
+                sendMessage(player, "You missed the reel timing!"); // Optional user feedback
             }
         }
     }
@@ -194,7 +209,7 @@ public class FishingListener implements Listener {
     /**
      * Sends messages to the specified player.
      *
-     * @param player the player to send messages to
+     * @param player   the player to send messages to
      * @param messages the messages to send to the player
      */
     private void sendMessage(Player player, String... messages) {

@@ -18,10 +18,9 @@ import org.bukkit.boss.BossBar;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
+import java.util.function.Consumer;
 
-import org.joml.Random;
-import org.yaml.snakeyaml.internal.Logger;
-
+import java.util.Random;
 /*
 * CRUNCHIEST FISHING
 *   ____ ____  _   _ _   _  ____ _   _ ___ _____ ____ _____   _____ ___ ____  _   _ ___ _   _  ____ 
@@ -54,6 +53,15 @@ public class FishingSession {
     private final BossBar clickBossBar;
     private long reelStartTime;
 
+    private static final String FISH_ON_TITLE = ChatColor.GOLD + "FISH ON!";
+    private static final String REELING_MESSAGE = ChatColor.DARK_GREEN + "better get reeling";
+    private static final String FISH_STRUGGLE_TITLE = "- Fish Struggle -";
+    private static final String REELING_PROGRESS_TITLE = "- Reeling Progress -";
+    private static final String STOPPED_MESSAGE = "You stopped fishing, and let the fish go.";
+    private static final String SLOW_MESSAGE = "You were too slow! The fish got away.";
+    private static final String ESCAPED_MESSAGE = "You reeled too fast! The fish escaped.";
+    private static final String QUICK_PULL_MESSAGE = "QUICKLY PULL THE FISH IN!";
+
     /**
      * Constructor for the FishingSession class.
      *
@@ -69,17 +77,15 @@ public class FishingSession {
 
         fishingData.setFishingSession(this);
 
-        timeBossBar = Bukkit.createBossBar("Time Remaining", BarColor.BLUE, BarStyle.SOLID);
-        clickBossBar = Bukkit.createBossBar("Click Percentage", BarColor.GREEN, BarStyle.SOLID);
-        timeBossBar.setTitle("- Fish Struggle -");
-        clickBossBar.setTitle("- Reeling Progress -");
+        timeBossBar = Bukkit.createBossBar(FISH_STRUGGLE_TITLE, BarColor.BLUE, BarStyle.SOLID);
+        clickBossBar = Bukkit.createBossBar(REELING_PROGRESS_TITLE, BarColor.GREEN, BarStyle.SOLID);
     }
 
     /**
      * Starts the reel session for the player, initiating boss bars and progress tracking.
      */
     public void startReelSession() {
-        player.sendTitle(ChatColor.GOLD + "FISH ON!", ChatColor.DARK_GREEN + "better get reeling", 5, 10, 5);
+        player.sendTitle(FISH_ON_TITLE, REELING_MESSAGE, 5, 10, 5);
         fishingData.resetClickCount();
         int targetClicks = calculateTargetClicks(fishingData.getCaughtFish());
         fishingData.setTargetClicks(targetClicks);
@@ -96,8 +102,7 @@ public class FishingSession {
                 long elapsedTime = currentTime - reelStartTime;
 
                 if (!hasFishingRodInHand(player) || !fishingData.canReel()) {
-                    player.sendMessage("You stopped fishing, and let the fish go.");
-                    SoundUtil.playFailureSound(player);
+                    sendMessageAndSound(STOPPED_MESSAGE, SoundUtil::playFailureSound);
                     clearProgressBars();
                     stopFishing();
                     this.cancel();
@@ -108,8 +113,7 @@ public class FishingSession {
                     handleSuccessfulReel(totalReelTime);
                     this.cancel();
                 } else if (elapsedTime >= totalReelTime) {
-                    player.sendMessage("You were too slow! The fish got away.");
-                    SoundUtil.playFailureSound(player);
+                    sendMessageAndSound(SLOW_MESSAGE, SoundUtil::playFailureSound);
                     clearProgressBars();
                     stopFishing();
                     this.cancel();
@@ -118,6 +122,17 @@ public class FishingSession {
                 }
             }
         }.runTaskTimer(plugin, 0L, 1L);
+    }
+
+    /**
+     * Sends a message to the player and plays the corresponding sound.
+     *
+     * @param message the message to send to the player
+     * @param soundAction the sound to play
+     */
+    private void sendMessageAndSound(String message, Consumer<Player> soundAction) {
+        player.sendMessage(message);
+        soundAction.accept(player);
     }
 
     /**
@@ -130,12 +145,10 @@ public class FishingSession {
         clearProgressBars();
 
         if (timeOfFinalClick < totalReelTime * 0.4) {
-            player.sendMessage("You reeled too fast! The fish escaped.");
-            SoundUtil.playFailureSound(player);
+            sendMessageAndSound(ESCAPED_MESSAGE, SoundUtil::playFailureSound);
             stopFishing();
         } else {
-            player.sendMessage("QUICKLY PULL THE FISH IN!");
-            SoundUtil.playSuccessSound(player);
+            sendMessageAndSound(QUICK_PULL_MESSAGE, SoundUtil::playSuccessSound);
             fishingData.resetClickCount();
             fishingData.setFishEscaped(true);
             startTiredFishTimer();
@@ -152,8 +165,7 @@ public class FishingSession {
             @Override
             public void run() {
                 if (ticksElapsed >= TIRED_FISH_TIME_LIMIT) {
-                    player.sendMessage("You were too slow! The fish got away.");
-                    SoundUtil.playFailureSound(player);
+                    sendMessageAndSound(SLOW_MESSAGE, SoundUtil::playFailureSound);
                     stopFishing();
                     this.cancel();
                     return;
@@ -162,21 +174,20 @@ public class FishingSession {
                 if (!fishingData.isFishEscaped()) {
                     int randomValue = new Random().nextInt(100) + 1; // 1 to 100
 
-                    // Use a ternary operator for the action
                     if (randomValue <= 70) {
                         FishUtil.displayCaughtFish(player, fishingData, plugin); // 70% chance to display fish
                     } else {
                         TreasureUtil.generateTreasure(player, treasureManager); // 30% chance to spawn treasure
-                      }
-                      this.cancel();
-                      return;
+                    }
+                    stopFishing();
+                    this.cancel();
+                    return;
                 }
 
                 ticksElapsed++;
             }
         }.runTaskTimer(plugin, 0L, 1L);
     }
-
 
     /**
      * Calculates the target number of clicks needed to reel in a caught fish.
@@ -193,7 +204,8 @@ public class FishingSession {
         int maxPossibleClicks = (int) Math.floor(MAX_CLICKS_PER_SECOND * totalReelTimeSeconds);
         int baseClicks = (int) Math.ceil((weight * 2.0) + (length * 1.5));
 
-        Logger.getLogger(weight + "," + length + "," + baseClicks + "," + maxPossibleClicks);
+        // Improved logging
+        plugin.getLogger().info("Calculating target clicks: weight=" + weight + ", length=" + length + ", baseClicks=" + baseClicks + ", maxPossibleClicks=" + maxPossibleClicks);
         return Math.min(baseClicks * 2, maxPossibleClicks);
     }
 
@@ -232,13 +244,26 @@ public class FishingSession {
      * Checks if the player is holding a fishing rod in either hand.
      *
      * @param player the player to check
-     * @return true if a fishing rod is found in either hand
+     * @return true if a fishing rod is found in either hand; false otherwise
      */
     private boolean hasFishingRodInHand(Player player) {
-        ItemStack mainHand = player.getInventory().getItemInMainHand();
-        ItemStack offHand = player.getInventory().getItemInOffHand();
-        return (mainHand != null && mainHand.getType() == Material.FISHING_ROD) ||
-               (offHand != null && offHand.getType() == Material.FISHING_ROD);
+      ItemStack mainHand = player.getInventory().getItemInMainHand();
+      ItemStack offHand = player.getInventory().getItemInOffHand();
+
+      return !isItemStackEmpty(mainHand) && mainHand.getType() == Material.FISHING_ROD ||
+            !isItemStackEmpty(offHand) && offHand.getType() == Material.FISHING_ROD;
     }
 
+    /**
+    * Checks if the specified ItemStack is empty.
+    *
+    * An ItemStack is considered empty if it is null, its type is AIR, 
+    * or its amount is less than or equal to zero.
+    *
+    * @param itemStack the ItemStack to check
+    * @return true if the ItemStack is empty; false otherwise
+    */
+    private boolean isItemStackEmpty(ItemStack itemStack) {
+      return itemStack == null || itemStack.getType() == Material.AIR || itemStack.getAmount() <= 0;
+}
 }

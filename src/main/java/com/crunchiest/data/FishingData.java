@@ -1,10 +1,9 @@
 package com.crunchiest.data;
 
 import com.crunchiest.session.FishingSession;
+import org.bukkit.entity.FishHook;
 
 import java.util.UUID;
-
-import org.bukkit.entity.FishHook;
 
 /*
 * CRUNCHIEST FISHING
@@ -20,7 +19,6 @@ import org.bukkit.entity.FishHook;
 *       work in progress!
 * 
 * link: https://github.com/Crunchiest-Leaf/crunchiest_fish
-* 
 */
 
 /**
@@ -51,7 +49,6 @@ public class FishingData {
         this.fishEscaped = false;
         this.canReel = false;
     }
-    
 
     /**
      * Returns the UUID of the player.
@@ -222,8 +219,12 @@ public class FishingData {
      * Sets the fishing session associated with this fishing data.
      *
      * @param fishingSession the fishing session to set
+     * @throws IllegalArgumentException if the fishing session is already set
      */
     public void setFishingSession(FishingSession fishingSession) {
+        if (this.fishingSession != null) {
+            throw new IllegalArgumentException("Fishing session is already set.");
+        }
         this.fishingSession = fishingSession; // Setter for FishingSession
     }
 
@@ -232,6 +233,7 @@ public class FishingData {
      *
      * @param caughtFish the fish that is caught
      * @param reelTime   the time allocated for reeling in the fish
+     * @param hook       the fishing hook used
      */
     public void startFishing(CustomFish caughtFish, long reelTime, FishHook hook) {
         this.caughtFish = caughtFish;
@@ -243,10 +245,14 @@ public class FishingData {
         this.hook = hook;
     }
 
-    public FishHook getFishingHook(){
-      return this.hook;
+    /**
+     * Returns the fishing hook associated with this fishing data.
+     *
+     * @return the fishing hook
+     */
+    public FishHook getFishingHook() {
+        return this.hook;
     }
-
 
     /**
      * Stops the fishing session, resetting relevant attributes.
@@ -259,5 +265,17 @@ public class FishingData {
         this.canReel = false;
         this.lastReelClickTime = 0;
         this.hook = null;
+        this.fishingSession = null; // Reset fishing session when stopping fishing
+    }
+
+    /**
+     * Returns a string representation of the fishing data.
+     *
+     * @return a string detailing the fishing data
+     */
+    @Override
+    public String toString() {
+        return String.format("FishingData{playerUUID=%s, caughtFish=%s, reelTime=%d, clickCount=%d, canReel=%s, fishEscaped=%s}",
+                playerUUID, caughtFish, reelTime, clickCount, canReel, fishEscaped);
     }
 }
