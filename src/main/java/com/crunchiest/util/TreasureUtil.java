@@ -50,7 +50,7 @@ public class TreasureUtil {
     // Add formatted descriptions with additional spacing
     description.addAll(StringUtil.formatEntityDescriptions(treasure.getDescription())
         .stream()
-        .map(line -> "§f- " + line) // Prefix each line with a bullet point
+        .map(line -> "§f " + line) // Prefix each line with a bullet point
         .toList());
 
     // Add a decorative footer

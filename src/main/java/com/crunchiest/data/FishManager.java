@@ -68,23 +68,33 @@ public class FishManager {
      * @return a randomly selected Fish object or null if no fish available
      */
     public CustomFish createRandomFish() {
-        if (fishList.isEmpty()) {
-            return null; // No fish available
-        }
-
-        // Calculate total rarity
-        int totalRarity = fishList.stream().mapToInt(CustomFish::getRarity).sum();
-        int rarityRoll = (int) (Math.random() * totalRarity);
-
-        int currentRaritySum = 0;
-        for (CustomFish fish : fishList) {
-            currentRaritySum += fish.getRarity();
-            if (rarityRoll < currentRaritySum) {
-                return fish;
-            }
-        }
-
-        return null; // Fallback (should not happen)
-    }
-
+      if (fishList.isEmpty()) {
+          return null; // No fish available
+      }
+  
+      // Calculate total rarity
+      int totalRarity = fishList.stream().mapToInt(CustomFish::getRarity).sum();
+      int rarityRoll = (int) (Math.random() * totalRarity);
+  
+      int currentRaritySum = 0;
+      for (CustomFish templateFish : fishList) {
+          currentRaritySum += templateFish.getRarity();
+          if (rarityRoll < currentRaritySum) {
+              // Create a new CustomFish based on the templateFish's properties
+              return new CustomFish(
+                  templateFish.getType(),
+                  templateFish.getMinLength(),
+                  templateFish.getMaxLength(),
+                  templateFish.getMinWeight(),
+                  templateFish.getMaxWeight(),
+                  templateFish.getRarity(),
+                  templateFish.getDescription(),
+                  templateFish.getEntityType()
+              );
+          }
+      }
+  
+      return null; // Fallback (should not happen)
+  }
+  
 }

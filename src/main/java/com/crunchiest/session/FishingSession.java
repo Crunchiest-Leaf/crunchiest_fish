@@ -7,7 +7,9 @@ import com.crunchiest.data.TreasureManager;
 import com.crunchiest.util.SoundUtil;
 import com.crunchiest.util.TreasureUtil;
 import com.crunchiest.util.FishUtil;
+
 import net.md_5.bungee.api.ChatColor;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.boss.BarColor;
@@ -16,7 +18,9 @@ import org.bukkit.boss.BossBar;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
+
 import org.joml.Random;
+import org.yaml.snakeyaml.internal.Logger;
 
 /*
 * CRUNCHIEST FISHING
@@ -79,7 +83,6 @@ public class FishingSession {
         fishingData.resetClickCount();
         int targetClicks = calculateTargetClicks(fishingData.getCaughtFish());
         fishingData.setTargetClicks(targetClicks);
-
         reelStartTime = System.currentTimeMillis();
         long totalReelTime = fishingData.getReelTime();
 
@@ -190,6 +193,7 @@ public class FishingSession {
         int maxPossibleClicks = (int) Math.floor(MAX_CLICKS_PER_SECOND * totalReelTimeSeconds);
         int baseClicks = (int) Math.ceil((weight * 2.0) + (length * 1.5));
 
+        Logger.getLogger(weight + "," + length + "," + baseClicks + "," + maxPossibleClicks);
         return Math.min(baseClicks * 2, maxPossibleClicks);
     }
 

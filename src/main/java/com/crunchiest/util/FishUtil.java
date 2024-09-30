@@ -90,7 +90,7 @@ public class FishUtil {
     List<String> description = new ArrayList<>();
 
     // Decorative header with name
-    description.add(ChatColor.BLUE + "§l════ Fish Caught ════");
+    description.add(ChatColor.BLUE + "§l-=-- Fish Caught --=-");
     description.add(ChatColor.YELLOW + " - A remarkable catch!");
 
     // Add some spacing
@@ -104,7 +104,7 @@ public class FishUtil {
     description.add(ChatColor.WHITE + " ");
 
     // Decorative divider
-    description.add(ChatColor.BLUE + "§l═════════════════════");
+    description.add(ChatColor.BLUE + "§l-=---=-=-----=-=---=-");
 
     // Add formatted descriptions with bullets and colors
     description.addAll(StringUtil.formatEntityDescriptions(caughtFish.getDescription())
@@ -115,7 +115,7 @@ public class FishUtil {
     // Add a decorative footer
     description.add(ChatColor.WHITE + " ");
     description.add(ChatColor.GRAY + "  Happy fishing!"); // A closing remark
-    description.add(ChatColor.BLUE + "§l═════════════════════");
+    description.add(ChatColor.BLUE + "§l-=---=-=-----=-=---=-");
 
     return description;
 }
