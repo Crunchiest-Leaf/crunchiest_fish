@@ -4,7 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.ThreadLocalRandom;
-
+import java.util.logging.Logger;
+import java.util.logging.Level;
 import com.crunchiest.config.FishConfig;
 
 /*
@@ -26,12 +27,14 @@ import com.crunchiest.config.FishConfig;
  */
 public class FishManager {
     private final List<CustomFish> fishList;
+    Logger logger;
 
     /**
      * Constructs a FishManager.
      */
-    public FishManager() {
+    public FishManager(Logger logger) {
         this.fishList = new ArrayList<>();
+        this.logger = logger;
     }
 
     /**
@@ -52,6 +55,7 @@ public class FishManager {
     public void refreshFishData(FishConfig fishConfig) {
         List<CustomFish> updatedFishList = fishConfig.loadFishData();
         addCustomFish(updatedFishList); // Refresh fish data in the manager
+        this.logger.log(Level.INFO, "Fish Data Received by Fish Manager");
     }
 
     /**

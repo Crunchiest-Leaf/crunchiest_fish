@@ -5,8 +5,13 @@ import com.crunchiest.config.TreasureConfig;
 import com.crunchiest.data.FishManager;
 import com.crunchiest.data.TreasureManager;
 import com.crunchiest.listener.InteractionListener;
+
+import net.md_5.bungee.api.ChatColor;
+
 import com.crunchiest.listener.FishingListener;
+import com.crunchiest.command.ReloadCommand;
 import org.bukkit.plugin.java.JavaPlugin;
+import java.util.logging.Logger;
 
 /*
  * CRUNCHIEST FISHING
@@ -67,6 +72,7 @@ public class CrunchiestFishingPlugin extends JavaPlugin {
     private FishManager fishManager;
     private TreasureManager treasureManager;
     private TreasureConfig treasureConfig;
+    public Logger logger = getLogger();
 
     /**
      * Called when the plugin is enabled. Initializes listeners and registers them.
@@ -74,12 +80,13 @@ public class CrunchiestFishingPlugin extends JavaPlugin {
     @Override
     public void onEnable() {
         // Initialize configurations
+        logger.info("Initialising Crunchiest fishing...");
         this.fishConfig = new FishConfig(this);
-        this.fishManager = new FishManager();
+        this.fishManager = new FishManager(logger);
         fishConfig.reloadConfig(fishManager);
 
         this.treasureConfig = new TreasureConfig(this);
-        this.treasureManager = new TreasureManager();
+        this.treasureManager = new TreasureManager(logger);
         treasureConfig.reloadConfig(treasureManager);
 
         // Initialize and register listeners
@@ -87,7 +94,10 @@ public class CrunchiestFishingPlugin extends JavaPlugin {
         this.interactionListener = new InteractionListener(fishingListener);
         getServer().getPluginManager().registerEvents(fishingListener, this);
         getServer().getPluginManager().registerEvents(interactionListener, this);
-        getLogger().info("Crunchiest Fishing enabled!");
+        logger.info("Crunchiest Fishing enabled!");
+
+        // Initialise and register commands
+        this.getCommand("fishingreload").setExecutor(new ReloadCommand(this));
     }
 
     /**
@@ -99,7 +109,7 @@ public class CrunchiestFishingPlugin extends JavaPlugin {
         if (fishingListener != null) {
             fishingListener.clearData();
         }
-        getLogger().info("Crunchiest Fishing disabled!");
+        logger.info("Crunchiest Fishing disabled!");
     }
 
     /**
@@ -115,7 +125,27 @@ public class CrunchiestFishingPlugin extends JavaPlugin {
      * Reloads the fish configuration and updates the fish manager.
      */
     public void reloadFishConfig() {
+        logger.info(ChatColor.DARK_GREEN + "Reloading Fish Config!");
         fishConfig.reloadConfig(fishManager);
+        logger.info(ChatColor.DARK_GREEN + "Reloaded Fish Config!");
+    }
+
+    
+    /**
+     * Reloads the fish configuration and updates the fish manager.
+     */
+    public void reloadTreasureConfig() {
+      logger.info(ChatColor.DARK_GREEN + "Reloading Treasure Config!");
+      treasureConfig.reloadConfig(treasureManager);
+      logger.info(ChatColor.DARK_GREEN + "Reloaded Treasure Config!");
+    }
+
+    public void reloadAllConfigs() {
+      logger.info(ChatColor.BLUE + "--");
+      reloadFishConfig();
+      reloadTreasureConfig();
+      logger.info("--");
+      logger.info(ChatColor.BLUE + "--");
     }
 
     /**

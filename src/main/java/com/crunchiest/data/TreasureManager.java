@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.logging.Logger;
+import java.util.logging.Level;
 
 /*
 * CRUNCHIEST FISHING
@@ -25,12 +27,14 @@ import java.util.concurrent.ThreadLocalRandom;
  */
 public class TreasureManager {
     private final List<CustomTreasure> treasureList;
+    private Logger logger;
 
     /**
      * Constructs a TreasureManager.
      */
-    public TreasureManager() {
+    public TreasureManager(Logger logger) {
         this.treasureList = new ArrayList<>();
+        this.logger = logger;
     }
 
     /**
@@ -51,6 +55,7 @@ public class TreasureManager {
     public void refreshTreasureData(TreasureConfig treasureConfig) {
         List<CustomTreasure> updatedTreasureList = treasureConfig.loadTreasureData();
         addCustomTreasures(updatedTreasureList); // Refresh treasure data in the manager
+        this.logger.log(Level.INFO, "Treasure Data Received by Treasure Manager");
     }
 
     /**
