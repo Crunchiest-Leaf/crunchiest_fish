@@ -2,7 +2,10 @@ package com.crunchiest.data;
 
 import java.util.List;
 import java.util.Random;
-import org.bukkit.entity.EntityType;
+import org.bukkit.Material;
+
+import io.lumine.mythic.api.mobs.entities.MythicEntityType;
+
 
 /*
 * CRUNCHIEST FISHING
@@ -31,7 +34,8 @@ public class CustomFish {
   private double maxWeight; // Maximum weight
   private int rarity;
   private List<String> description;
-  private EntityType entityType;
+  private String entityType;
+  private String materialType;
 
   private static final Random RANDOM = new Random();
 
@@ -48,7 +52,7 @@ public class CustomFish {
    * @param entityType The entity type of the fish (Minecraft entity type).
    */
   public CustomFish(String type, double minLength, double maxLength,
-            double minWeight, double maxWeight, int rarity, List<String> description, EntityType entityType) {
+            double minWeight, double maxWeight, int rarity, List<String> description, String entityType, String materialType) {
       this.type = type;
       this.minLength = minLength;
       this.maxLength = maxLength;
@@ -57,6 +61,7 @@ public class CustomFish {
       this.rarity = rarity;
       this.description = description;
       this.entityType = entityType;
+      this.materialType = materialType;
 
       // Generate random length and weight on fish creation
       this.length = getRandomLength(minLength, maxLength);
@@ -68,7 +73,7 @@ public class CustomFish {
    *
    * @return The entity type of the fish.
    */
-  public EntityType getEntityType() {
+  public String getEntityType() {
       return entityType;
   }
 
@@ -79,6 +84,10 @@ public class CustomFish {
    */
   public String getType() {
       return type;
+  }
+
+  public String getMaterialType() {
+    return materialType;
   }
 
   /**

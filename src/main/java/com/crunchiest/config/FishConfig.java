@@ -1,5 +1,6 @@
 package com.crunchiest.config;
 
+import org.bukkit.Material;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.EntityType;
@@ -145,11 +146,12 @@ public class FishConfig {
                   List<String> description = fishConfig.getStringList(path + ".description");
 
                   // Read the entity type for the fish
-                  String entityTypeName = fishConfig.getString(path + ".entityType", "COD"); // Default to COD if not specified
-                  EntityType entityType = EntityType.valueOf(entityTypeName.toUpperCase());
-
+                  String mobTypeName = fishConfig.getString(path + ".entityType", "COD"); // Default to COD if not specified
+                  String dropMaterial = fishConfig.getString(path + ".dropMaterial", "COD");
+                
                   // Create new CustomFish object and add it to the list
-                  CustomFish customFish = new CustomFish(fishName, minLength, maxLength, minWeight, maxWeight, rarity, description, entityType);
+                  CustomFish customFish = new CustomFish(fishName, minLength, maxLength, minWeight, maxWeight, rarity, description, mobTypeName, dropMaterial);
+                  plugin.getLogger().info(customFish.getMaterialType().toString());
                   fishList.add(customFish);
               } catch (IllegalArgumentException e) {
                   plugin.getLogger().severe("Invalid entity type for fish '" + fishName + "': " + e.getMessage());

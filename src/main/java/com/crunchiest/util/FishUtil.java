@@ -3,11 +3,10 @@ package com.crunchiest.util;
 // Bukkit API and Minecraft classes
 import org.bukkit.entity.Player;
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.entity.Entity;
-import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -19,6 +18,15 @@ import com.crunchiest.CrunchiestFishingPlugin;
 // Java utility classes
 import java.util.ArrayList;
 import java.util.List;
+
+import io.lumine.mythic.api.adapters.AbstractItemStack;
+import io.lumine.mythic.api.mobs.MythicMob;
+// mythic
+import io.lumine.mythic.bukkit.BukkitAdapter;
+import io.lumine.mythic.bukkit.MythicBukkit;
+import io.lumine.mythic.core.drops.droppables.MythicItemDrop;
+import io.lumine.mythic.core.items.MythicItem;
+import io.lumine.mythic.core.mobs.ActiveMob;
 
 /*
  * CRUNCHIEST FISHING
@@ -70,7 +78,9 @@ public class FishUtil {
      */
     public static void spawnFishInFrontOfPlayer(Player player, CustomFish caughtFish, CrunchiestFishingPlugin plugin) {
         Location spawnLocation = player.getEyeLocation().add(player.getLocation().getDirection().normalize().multiply(1.5));
-        Entity fishEntity = player.getWorld().spawnEntity(spawnLocation, caughtFish.getEntityType());
+        MythicMob fishEntity = MythicBukkit.inst().getMobManager().getMythicMob(caughtFish.getEntityType()).orElse(null);
+        ActiveMob fish = fishEntity.spawn(BukkitAdapter.adapt(spawnLocation),1);
+        Entity fishBukkitEntity = fish.getEntity().getBukkitEntity();
 
         new BukkitRunnable() {
             int ticks = 0;
@@ -79,34 +89,35 @@ public class FishUtil {
             @Override
             public void run() {
                 if (ticks < duration) {
-                    updateFishPosition(player, fishEntity);
+                    updateFishPosition(player, fishBukkitEntity);
                     ticks++;
                 } else {
-                    dropFishItem(player, caughtFish, fishEntity);
-                    fishEntity.remove();
+                    dropFishItem(player, caughtFish, fishBukkitEntity);
+                    fish.remove();
                     cancel();
                 }
             }
         }.runTaskTimer(plugin, 0L, 1L);
     }
 
-    /**
+        /**
      * Updates the position of the fish entity above the player's eye level.
      *
      * @param player     The player who caught the fish.
      * @param fishEntity The fish entity to move.
      */
     private static void updateFishPosition(Player player, Entity fishEntity) {
-        Location playerLocation = player.getEyeLocation();
-        float playerYaw = playerLocation.getYaw();
+      Location playerLocation = player.getEyeLocation();
+      float playerYaw = playerLocation.getYaw();
 
-        double distance = 0.7;
-        double xOffset = distance * Math.cos(Math.toRadians(playerYaw + 90));
-        double zOffset = distance * Math.sin(Math.toRadians(playerYaw + 90));
+      double distance = 0.7;
+      double xOffset = distance * Math.cos(Math.toRadians(playerYaw + 90));
+      double zOffset = distance * Math.sin(Math.toRadians(playerYaw + 90));
 
-        fishEntity.teleport(playerLocation.clone().add(xOffset, -0.75, zOffset));
-        fishEntity.setRotation(playerYaw + 90, 0);
-    }
+      fishEntity.teleport(playerLocation.clone().add(xOffset, -0.75, zOffset));
+      fishEntity.setRotation(playerYaw + 90, 0);
+  }
+
 
     /**
      * Drops the fish item at the location of the fish entity.
@@ -116,85 +127,11 @@ public class FishUtil {
      * @param fishEntity The fish entity that was spawned.
      */
     public static void dropFishItem(Player player, CustomFish caughtFish, Entity fishEntity) {
-        ItemStack fishItem = createFishItem(caughtFish);
-        player.getWorld().dropItemNaturally(fishEntity.getLocation(), fishItem);
+        MythicItem item = MythicBukkit.inst().getItemManager().getItem(caughtFish.getMaterialType()).orElse(null);
+        AbstractItemStack abstractItem = item.generateItemStack(1);
+        ItemStack stack = BukkitAdapter.adapt(abstractItem);
+        player.getWorld().dropItemNaturally(fishEntity.getLocation(), stack);
     }
 
-    /**
-     * Creates an ItemStack for the caught fish with metadata.
-     *
-     * @param caughtFish The fish that was caught.
-     * @return An ItemStack representing the caught fish.
-     */
-    private static ItemStack createFishItem(CustomFish caughtFish) {
-        ItemStack fishItem = new ItemStack(getMaterialFromEntityType(caughtFish.getEntityType()));
-        ItemMeta meta = fishItem.getItemMeta();
 
-        if (meta != null) {
-            meta.setDisplayName(ChatColor.GOLD + StringUtil.removeUnderscores(caughtFish.getType()));
-            meta.setLore(createFishLore(caughtFish));
-            fishItem.setItemMeta(meta);
-        }
-
-        return fishItem;
-    }
-
-    /**
-     * Creates a lore list for the caught fish.
-     *
-     * @param caughtFish The fish that was caught.
-     * @return A list of strings representing the lore for the caught fish.
-     */
-    private static List<String> createFishLore(CustomFish caughtFish) {
-        List<String> description = new ArrayList<>();
-
-        // Decorative header with name
-        description.add(ChatColor.BLUE + "§l-=-- Fish Caught --=-");
-        description.add(ChatColor.YELLOW + " - A remarkable catch!");
-
-        // Add some spacing
-        description.add(ChatColor.WHITE + " ");
-
-        // Fish details with styling
-        description.add(ChatColor.GRAY + "§a✦ §fLength: " + ChatColor.AQUA + caughtFish.getLength() + " cm");
-        description.add(ChatColor.GRAY + "§a✦ §fWeight: " + ChatColor.AQUA + caughtFish.getWeight() + " kg");
-
-        // Add some spacing
-        description.add(ChatColor.WHITE + " ");
-
-        // Decorative divider
-        description.add(ChatColor.BLUE + "§l-=---=-=-----=-=---=-");
-
-        // Add formatted descriptions with bullets and colors
-        description.addAll(StringUtil.formatEntityDescriptions(caughtFish.getDescription())
-                .stream()
-                .map(line -> ChatColor.YELLOW + " " + ChatColor.WHITE + line) // Use a bullet for each line
-                .toList());
-
-        // Add a decorative footer
-        description.add(ChatColor.WHITE + " ");
-        description.add(ChatColor.GRAY + "  Happy fishing!"); // A closing remark
-        description.add(ChatColor.BLUE + "§l-=---=-=-----=-=---=-");
-
-        return description;
-    }
-
-    /**
-     * Gets the material type corresponding to the given entity type.
-     *
-     * @param entityType The entity type to get the material for.
-     * @return The corresponding Material for the entity type.
-     */
-    private static Material getMaterialFromEntityType(EntityType entityType) {
-        switch (entityType) {
-            case SALMON:
-                return Material.SALMON;
-            case TROPICAL_FISH:
-                return Material.TROPICAL_FISH;
-            case PUFFERFISH:
-                return Material.PUFFERFISH;
-            default:
-                return Material.COD;
-        }
-    }
 }

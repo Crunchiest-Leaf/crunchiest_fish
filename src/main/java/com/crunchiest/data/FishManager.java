@@ -94,7 +94,8 @@ public class FishManager {
                     templateFish.getMaxWeight(),
                     templateFish.getRarity(),
                     templateFish.getDescription(),
-                    templateFish.getEntityType()
+                    templateFish.getEntityType(),
+                    templateFish.getMaterialType()
                 ));
             }
         }
