@@ -23,9 +23,8 @@ import java.util.List;
  */
 public class CustomTreasure {
     private final String name;
-    private final List<String> description;
-    private final Material material;
     private final int rarity;
+    private final int quantity;
 
     /**
      * Constructs a CustomTreasure object with specified attributes.
@@ -35,11 +34,10 @@ public class CustomTreasure {
      * @param material    The material type of the treasure.
      * @param rarity      An integer representing the rarity of the treasure.
      */
-    public CustomTreasure(String name, List<String> description, Material material, int rarity) {
+    public CustomTreasure(String name, int rarity, int quantity) {
         this.name = name;
-        this.description = description;
-        this.material = material;
         this.rarity = rarity;
+        this.quantity = quantity;
     }
 
     /**
@@ -51,23 +49,10 @@ public class CustomTreasure {
         return name;
     }
 
-    /**
-     * Gets the description of the treasure.
-     *
-     * @return A list of strings representing the treasure's description.
-     */
-    public List<String> getDescription() {
-        return description;
+    public int getQuantity(){
+      return quantity;
     }
 
-    /**
-     * Gets the material type of the treasure.
-     *
-     * @return The material of the treasure.
-     */
-    public Material getMaterial() {
-        return material;
-    }
 
     /**
      * Gets the rarity of the treasure.
@@ -85,6 +70,7 @@ public class CustomTreasure {
      */
     @Override
     public String toString() {
-        return String.format("Treasure{name='%s', material=%s, rarity=%d}", name, material, rarity);
+        return String.format("Treasure{name='%s', material=%s, rarity=%d}", name, rarity);
     }
+
 }

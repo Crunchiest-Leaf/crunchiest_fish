@@ -1,6 +1,6 @@
 fish:
   Goldfish:
-    entityType: "SkeletalKnight"  # Using TROPICAL_FISH as a representative
+    entityType: "SkeletalKnight"  # Using SkeletalKnight as a representative
     minLength: 5.0
     maxLength: 15.0
     minWeight: 0.01
@@ -9,5 +9,4 @@ fish:
     description:
       - "A small, shiny goldfish."
       - "Common in ponds and small lakes."
-    dropMaterial:
-      - "TROPICAL_FISH"
+    dropMaterial: "SkeletonKingSword"

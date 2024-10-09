@@ -136,13 +136,10 @@ public class TreasureConfig {
 
                 try {
                     // Read treasure attributes
-                    List<String> description = treasureConfig.getStringList(path + ".description");
-                    String materialName = treasureConfig.getString(path + ".material", "GOLD_NUGGET"); // Default to GOLD_NUGGET if not specified
-                    Material material = Material.valueOf(materialName.toUpperCase());
                     int rarity = treasureConfig.getInt(path + ".rarity");
-
+                    int quantity = treasureConfig.getInt(path + ".quantity");
                     // Create new CustomTreasure object and add it to the list
-                    CustomTreasure customTreasure = new CustomTreasure(treasureName, description, material, rarity);
+                    CustomTreasure customTreasure = new CustomTreasure(treasureName, rarity, quantity);
                     treasureList.add(customTreasure);
                 } catch (IllegalArgumentException e) {
                     plugin.getLogger().severe("Invalid material for treasure '" + treasureName + "': " + e.getMessage());

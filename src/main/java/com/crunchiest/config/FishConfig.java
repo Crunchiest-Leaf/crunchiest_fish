@@ -1,9 +1,7 @@
 package com.crunchiest.config;
 
-import org.bukkit.Material;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.entity.EntityType;
 
 import com.crunchiest.CrunchiestFishingPlugin;
 import com.crunchiest.data.CustomFish;
